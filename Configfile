@@ -92,10 +92,10 @@ CACHE_SIZE=
 # standard paths (for example '/usr/lib/' or '/usr/lib64/'). If the name of a library is
 # not specified, it is assumed that the library has a default name ('libboost_system.*'
 # and 'libboost_thread.*', respectively).
-BOOST_INCLUDE_PATH=
-BOOST_LIBRARY_PATH=
-BOOST_SYSTEM_LIBRARY=
-BOOST_THREAD_LIBRARY=
+BOOST_INCLUDE_PATH='/usr/local/include'
+BOOST_LIBRARY_PATH='/usr/local/lib'
+BOOST_SYSTEM_LIBRARY='/usr/local/lib'
+BOOST_THREAD_LIBRARY='/usr/local/lib'
 
 # Configuration of the BLAS library (optional)
 # The Blaze library offers the possibilty to use a BLAS library for certain basic linear
