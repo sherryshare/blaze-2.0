@@ -1,0 +1,179 @@
+//=================================================================================================
+/*!
+//  \file src/blas/TDMatTDMatMult.cpp
+//  \brief Source file for the BLAS transpose dense matrix/transpose dense matrix multiplication kernel
+//
+//  Copyright (C) 2013 Klaus Iglberger - All Rights Reserved
+//
+//  This file is part of the Blaze library. You can redistribute it and/or modify it under
+//  the terms of the New (Revised) BSD License. Redistribution and use in source and binary
+//  forms, with or without modification, are permitted provided that the following conditions
+//  are met:
+//
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. Neither the names of the Blaze development group nor the names of its contributors
+//     may be used to endorse or promote products derived from this software without specific
+//     prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+//  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+//  SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+//  TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+//  BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+//  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+//  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+//  DAMAGE.
+*/
+//=================================================================================================
+
+
+//*************************************************************************************************
+// Includes
+//*************************************************************************************************
+
+#include <iostream>
+#include <blaze/math/DynamicMatrix.h>
+#include <blaze/util/Timing.h>
+#include <blazemark/blas/init/DynamicMatrix.h>
+#include <blazemark/blas/TDMatTDMatMult.h>
+#include <blazemark/system/BLAS.h>
+#include <blazemark/system/Config.h>
+
+
+namespace blazemark {
+
+namespace blas {
+
+//=================================================================================================
+//
+//  KERNEL FUNCTIONS
+//
+//=================================================================================================
+
+//*************************************************************************************************
+/*!\brief Kernel function for single precision matrices.
+//
+// \param Order Whether matrices are row major order (C-Style) for column major order (Fortran-style).
+// \param TransA Whether to transpose matrix A.
+// \param TransB Whether to transpose matrix B.
+// \param M Rows in matrices A and C.
+// \param N Columns in Matrices B and C.
+// \param K Columns in matrix A and Rows in matrix B.
+// \param alpha Scalar factor for \f$ op(A)op(B) \f$.
+// \param A Pointer to the first element of matrix A.
+// \param lda The size of the first dimension of matrix A.
+// \param B Pointer to the first element of matrix B.
+// \param ldb The size of the first dimension of matrix B.
+// \param beta Scalar factor for \f$ C \f$.
+// \param C Pointer to the first element of matrix C.
+// \param ldc The size of the first dimension of matrix C.
+// \return void
+*/
+inline void gemm( const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA,
+                  const CBLAS_TRANSPOSE TransB, const int M, const int N, const int K,
+                  const float alpha, const float *A, const int lda, const float *B, const int ldb,
+                  const float beta, float *C, const int ldc )
+{
+   cblas_sgemm( Order, TransA, TransB, M, N, K, alpha, A, lda, B, ldb, beta, C, ldc );
+}
+//*************************************************************************************************
+
+
+//*************************************************************************************************
+/*!\brief Kernel function for double precision matrices.
+//
+// \param Order Whether matrices are row major order (C-Style) for column major order (Fortran-style).
+// \param TransA Whether to transpose matrix A.
+// \param TransB Whether to transpose matrix B.
+// \param M Rows in matrices A and C.
+// \param N Columns in Matrices B and C.
+// \param K Columns in matrix A and Rows in matrix B.
+// \param alpha Scalar factor for \f$ op(A)op(B) \f$.
+// \param A Pointer to the first element of matrix A.
+// \param lda The size of the first dimension of matrix A.
+// \param B Pointer to the first element of matrix B.
+// \param ldb The size of the first dimension of matrix B.
+// \param beta Scalar factor for \f$ C \f$.
+// \param C Pointer to the first element of matrix C.
+// \param ldc The size of the first dimension of matrix C.
+// \return void
+*/
+inline void gemm( const CBLAS_ORDER Order, const CBLAS_TRANSPOSE TransA,
+                  const CBLAS_TRANSPOSE TransB, const int M, const int N, const int K,
+                  const double alpha, const double *A, const int lda, const double *B, const int ldb,
+                  const double beta, double *C, const int ldc )
+{
+   cblas_dgemm( Order, TransA, TransB, M, N, K, alpha, A, lda, B, ldb, beta, C, ldc );
+}
+//*************************************************************************************************
+
+
+
+
+//=================================================================================================
+//
+//  KERNEL FUNCTIONS
+//
+//=================================================================================================
+
+//*************************************************************************************************
+/*!\brief BLAS transpose dense matrix/transpose dense matrix multiplication kernel.
+//
+// \param N The number of rows and columns of the matrices.
+// \param steps The number of iteration steps to perform.
+// \return Minimum runtime of the kernel function.
+//
+// This kernel function implements the transpose dense matrix/transpose dense matrix
+// multiplication by means of BLAS functionality.
+*/
+double tdmattdmatmult( size_t N, size_t steps )
+{
+   using ::blazemark::element_t;
+   using ::blaze::columnMajor;
+
+   ::blaze::setSeed( seed );
+
+   ::blaze::DynamicMatrix<element_t,columnMajor> A( N, N ), B( N, N ), C( N, N );
+   ::blaze::timing::WcTimer timer;
+
+   init( A );
+   init( B );
+
+   gemm( CblasColMajor, CblasNoTrans, CblasNoTrans, N, N, N, element_t(1),
+         A.data(), A.spacing(), B.data(), B.spacing(), element_t(0), C.data(), C.spacing() );
+
+   for( size_t rep=0UL; rep<reps; ++rep )
+   {
+      timer.start();
+      for( size_t step=0UL; step<steps; ++step ) {
+         gemm( CblasColMajor, CblasNoTrans, CblasNoTrans, N, N, N, element_t(1),
+               A.data(), A.spacing(), B.data(), B.spacing(), element_t(0), C.data(), C.spacing() );
+      }
+      timer.end();
+
+      if( C.rows() != N )
+         std::cerr << " Line " << __LINE__ << ": ERROR detected!!!\n";
+
+      if( timer.last() > maxtime )
+         break;
+   }
+
+   const double minTime( timer.min()     );
+   const double avgTime( timer.average() );
+
+   if( minTime * ( 1.0 + deviation*0.01 ) < avgTime )
+      std::cerr << " BLAS kernel 'tdmattdmatmult': Time deviation too large!!!\n";
+
+   return minTime;
+}
+//*************************************************************************************************
+
+} // namespace blas
+
+} // namespace blazemark
