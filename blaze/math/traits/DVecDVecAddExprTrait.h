@@ -65,31 +65,31 @@ namespace blaze {
 // \ingroup math_traits
 //
 // Via this type trait it is possible to evaluate the resulting expression type of a dense
-// vector/dense vector addition. Given the two non-transpose dense vector types \a VT1 and
-// \a VT2, the nested type \a Type corresponds to the resulting expression type. In case
-// either \a VT1 or \a VT2 is not a non-transpose dense vector type, the resulting \a Type
+// vector/dense vector addition. Given the two non-transpose dense vector types \a VT1_ and
+// \a VT2_, the nested type \a Type corresponds to the resulting expression type. In case
+// either \a VT1_ or \a VT2_ is not a non-transpose dense vector type, the resulting \a Type
 // is set to \a INVALID_TYPE.
 */
-template< typename VT1    // Type of the left-hand side non-transpose dense vector
-        , typename VT2 >  // Type of the right-hand side non-transpose dense vector
+template< typename VT1_    // Type of the left-hand side non-transpose dense vector
+        , typename VT2_ >  // Type of the right-hand side non-transpose dense vector
 struct DVecDVecAddExprTrait
 {
  private:
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   enum { qualified = IsConst<VT1>::value || IsVolatile<VT1>::value || IsReference<VT1>::value ||
-                      IsConst<VT2>::value || IsVolatile<VT2>::value || IsReference<VT2>::value };
+   enum { qualified = IsConst<VT1_>::value || IsVolatile<VT1_>::value || IsReference<VT1_>::value ||
+                      IsConst<VT2_>::value || IsVolatile<VT2_>::value || IsReference<VT2_>::value };
    /*! \endcond */
    //**********************************************************************************************
 
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   typedef SelectType< IsDenseVector<VT1>::value && IsColumnVector<VT1>::value &&
-                       IsDenseVector<VT2>::value && IsColumnVector<VT2>::value
-                     , DVecDVecAddExpr<VT1,VT2,false>, INVALID_TYPE >  Tmp;
+   typedef SelectType< IsDenseVector<VT1_>::value && IsColumnVector<VT1_>::value &&
+                       IsDenseVector<VT2_>::value && IsColumnVector<VT2_>::value
+                     , DVecDVecAddExpr<VT1_,VT2_,false>, INVALID_TYPE >  Tmp;
 
-   typedef typename RemoveReference< typename RemoveCV<VT1>::Type >::Type  Type1;
-   typedef typename RemoveReference< typename RemoveCV<VT2>::Type >::Type  Type2;
+   typedef typename RemoveReference< typename RemoveCV<VT1_>::Type >::Type  Type1;
+   typedef typename RemoveReference< typename RemoveCV<VT2_>::Type >::Type  Type2;
    /*! \endcond */
    //**********************************************************************************************
 

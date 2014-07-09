@@ -325,10 +325,10 @@ class SVecTransposer : public SparseVector< SVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side dense vector
-   inline void assign( const DenseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side dense vector
+   inline void assign( const DenseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( sv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -355,10 +355,10 @@ class SVecTransposer : public SparseVector< SVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side sparse vector
-   inline void assign( const SparseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side sparse vector
+   inline void assign( const SparseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( sv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -368,7 +368,7 @@ class SVecTransposer : public SparseVector< SVecTransposer<VT,TF>, TF >
       //
       // results in much less requirements on the ConstIterator type provided from the right-hand
       // sparse vector type
-      for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+      for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
          sv_.append( element->index(), element->value() );
    }
    //**********************************************************************************************

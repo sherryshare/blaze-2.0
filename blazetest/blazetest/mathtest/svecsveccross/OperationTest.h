@@ -82,22 +82,22 @@ namespace svecsveccross {
 /*!\brief Auxiliary class template for the sparse vector/sparse vector cross product operation test.
 //
 // This class template represents one particular vector cross product test between two vectors
-// of a particular type. The two template arguments \a VT1 and \a VT2 represent the types of the
+// of a particular type. The two template arguments \a VT1_ and \a VT2_ represent the types of the
 // left-hand side and right-hand side vector, respectively.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
 class OperationTest
 {
  private:
    //**Type definitions****************************************************************************
-   typedef typename blaze::CrossTrait<VT1,VT2>::Type  RE;   //!< Default result type
+   typedef typename blaze::CrossTrait<VT1_,VT2_>::Type  RE;   //!< Default result type
    typedef typename RE::TransposeType                 TRE;  //!< Transpose default result type
    //**********************************************************************************************
 
    //**Type definitions****************************************************************************
-   typedef typename VT1::ElementType           ET1;    //!< Element type 1
-   typedef typename VT2::ElementType           ET2;    //!< Element type 2
+   typedef typename VT1_::ElementType           ET1;    //!< Element type 1
+   typedef typename VT2_::ElementType           ET2;    //!< Element type 2
    typedef typename RE::ElementType            RET;    //!< Resulting element type
    typedef blaze::DynamicVector<ET1,false>     RT1;    //!< Reference type 1
    typedef blaze::DynamicVector<ET2,false>     RT2;    //!< Reference type 2
@@ -111,14 +111,14 @@ class OperationTest
    typedef TSRRE                               TSRE;   //!< Transpose sparse result type
 
    //! Type of the cross product expression
-   typedef typename blaze::CrossExprTrait<VT1,VT2>::Type  CrossExprType;
+   typedef typename blaze::CrossExprTrait<VT1_,VT2_>::Type  CrossExprType;
    //**********************************************************************************************
 
  public:
    //**Constructors********************************************************************************
    /*!\name Constructors */
    //@{
-   explicit OperationTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 );
+   explicit OperationTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 );
    // No explicitly declared copy constructor.
    //@}
    //**********************************************************************************************
@@ -163,8 +163,8 @@ class OperationTest
    //**Member variables****************************************************************************
    /*!\name Member variables */
    //@{
-   VT1   lhs_;      //!< The left-hand side sparse vector.
-   VT2   rhs_;      //!< The right-hand side sparse vector.
+   VT1_   lhs_;      //!< The left-hand side sparse vector.
+   VT2_   rhs_;      //!< The right-hand side sparse vector.
    RT1   reflhs_;   //!< The reference left-hand side vector.
    RT2   refrhs_;   //!< The reference right-hand side vector.
    DRE   dres_;     //!< The dense vector for the result of the vector cross product.
@@ -181,8 +181,8 @@ class OperationTest
 
    //**Compile time checks*************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT1   );
-   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT2   );
+   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT1_   );
+   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT2_   );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( RT1   );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( RT2   );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( DRE   );
@@ -193,8 +193,8 @@ class OperationTest
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( TSRE  );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TDRRE );
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( TSRRE );
-   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT1   );
-   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT2   );
+   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT1_   );
+   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT2_   );
    BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( RT1   );
    BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( RT2   );
    BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( DRE   );
@@ -228,9 +228,9 @@ class OperationTest
 // \param creator2 The creator for the right-hand side sparse vector of the vector cross product.
 // \exception std::runtime_error Operation error detected.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-OperationTest<VT1,VT2>::OperationTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+OperationTest<VT1_,VT2_>::OperationTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 )
    : lhs_( creator1() )  // The left-hand side sparse vector
    , rhs_( creator2() )  // The right-hand side sparse vector
    , reflhs_( lhs_ )     // The reference left-hand side vector
@@ -284,9 +284,9 @@ OperationTest<VT1,VT2>::OperationTest( const Creator<VT1>& creator1, const Creat
 // This function runs tests on the initial status of the vectors. In case any initialization
 // error is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::testInitialStatus()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::testInitialStatus()
 {
    // Checking the size of the left-hand side operand
    if( lhs_.size() != reflhs_.size() ) {
@@ -295,7 +295,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector size\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Detected size = " << lhs_.size() << "\n"
           << "   Expected size = " << reflhs_.size() << "\n";
       throw std::runtime_error( oss.str() );
@@ -308,7 +308,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector size\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Detected size = " << rhs_.size() << "\n"
           << "   Expected size = " << refrhs_.size() << "\n";
       throw std::runtime_error( oss.str() );
@@ -321,7 +321,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Current initialization:\n" << lhs_ << "\n"
           << "   Expected initialization:\n" << reflhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -334,7 +334,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Current initialization:\n" << rhs_ << "\n"
           << "   Expected initialization:\n" << refrhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -352,9 +352,9 @@ void OperationTest<VT1,VT2>::testInitialStatus()
 // This function tests the vector assignment. In case any error is detected, a
 // \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::testAssignment()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::testAssignment()
 {
    try {
       lhs_ = reflhs_;
@@ -366,9 +366,9 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Failed assignment\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Error message: " << ex.what() << "\n";
       throw std::runtime_error( oss.str() );
    }
@@ -379,7 +379,7 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Current initialization:\n" << lhs_ << "\n"
           << "   Expected initialization:\n" << reflhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -391,7 +391,7 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Current initialization:\n" << rhs_ << "\n"
           << "   Expected initialization:\n" << refrhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -409,9 +409,9 @@ void OperationTest<VT1,VT2>::testAssignment()
 // This function tests the element access via the subscript operator. In case any
 // error is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::testElementAccess()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::testElementAccess()
 {
    using blaze::equal;
 
@@ -426,9 +426,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
           << " Error: Unequal resulting elements at index 0 detected\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n";
+          << "     " << typeid( VT2_ ).name() << "\n";
       throw std::runtime_error( oss.str() );
    }
 
@@ -438,9 +438,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
           << " Error: Unequal resulting elements at index 0 detected\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n";
+          << "     " << typeid( VT2_ ).name() << "\n";
       throw std::runtime_error( oss.str() );
    }
 
@@ -450,9 +450,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
           << " Error: Unequal resulting elements at index 0 detected\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n";
+          << "     " << typeid( VT2_ ).name() << "\n";
       throw std::runtime_error( oss.str() );
    }
 
@@ -462,9 +462,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
           << " Error: Unequal resulting elements at index 0 detected\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n";
+          << "     " << typeid( VT2_ ).name() << "\n";
       throw std::runtime_error( oss.str() );
    }
 }
@@ -482,9 +482,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
 // resulting from the cros product or the subsequent assignment is detected, a
 // \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::testBasicOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::testBasicOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_BASIC_OPERATION
    if( BLAZETEST_MATHTEST_TEST_BASIC_OPERATION > 1 )
@@ -666,9 +666,9 @@ void OperationTest<VT1,VT2>::testBasicOperation()
 // resulting from the cross product or the subsequent assignment is detected, a
 // \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::testNegatedOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::testNegatedOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_NEGATED_OPERATION
    if( BLAZETEST_MATHTEST_TEST_NEGATED_OPERATION > 1 )
@@ -853,10 +853,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
 // resulting from the cross product or the subsequent assignment is detected, a
 // \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
 template< typename T >    // Type of the scalar
-void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
+void OperationTest<VT1_,VT2_>::testScaledOperation( T scalar )
 {
    BLAZE_CONSTRAINT_MUST_BE_NUMERIC_TYPE( T );
 
@@ -1529,9 +1529,9 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
 // from the cross product or the subsequent assignment is detected, a \a std::runtime_error
 // exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::testTransposeOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::testTransposeOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_TRANSPOSE_OPERATION
    if( BLAZETEST_MATHTEST_TEST_TRANSPOSE_OPERATION > 1 )
@@ -1715,9 +1715,9 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
 // cross product or the subsequent assignment is detected, a \a std::runtime_error exception
 // is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::testAbsOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::testAbsOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_ABS_OPERATION
    if( BLAZETEST_MATHTEST_TEST_ABS_OPERATION > 1 )
@@ -1900,9 +1900,9 @@ void OperationTest<VT1,VT2>::testAbsOperation()
 // assignment, and subtraction assignment. In case any error resulting from the cross product
 // or the subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::testSubvectorOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::testSubvectorOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_SUBVECTOR_OPERATION
    if( BLAZETEST_MATHTEST_TEST_SUBVECTOR_OPERATION > 1 )
@@ -2116,9 +2116,9 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
 //
 // This function is called after each test case to check and compare the computed results.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::checkResults()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::checkResults()
 {
    if( !isEqual( dres_, refres_ ) ) {
       std::ostringstream oss;
@@ -2127,9 +2127,9 @@ void OperationTest<VT1,VT2>::checkResults()
           << " Error: Incorrect dense result vector detected\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Result:\n" << dres_ << "\n"
           << "   Expected result:\n" << refres_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -2142,9 +2142,9 @@ void OperationTest<VT1,VT2>::checkResults()
           << " Error: Incorrect sparse result vector detected\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Result:\n" << sres_ << "\n"
           << "   Expected result:\n" << refres_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -2163,9 +2163,9 @@ void OperationTest<VT1,VT2>::checkResults()
 // This function is called after each test case to check and compare the computed transpose
 // results.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::checkTransposeResults()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::checkTransposeResults()
 {
    if( !isEqual( tdres_, trefres_ ) ) {
       std::ostringstream oss;
@@ -2174,9 +2174,9 @@ void OperationTest<VT1,VT2>::checkTransposeResults()
           << " Error: Incorrect dense result vector detected\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Result:\n" << tdres_ << "\n"
           << "   Expected result:\n" << trefres_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -2189,9 +2189,9 @@ void OperationTest<VT1,VT2>::checkTransposeResults()
           << " Error: Incorrect sparse result vector detected\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side sparse vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Result:\n" << tsres_ << "\n"
           << "   Expected result:\n" << trefres_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -2216,9 +2216,9 @@ void OperationTest<VT1,VT2>::checkTransposeResults()
 // This function is called before each non-transpose test case to initialize the according result
 // vectors to random values.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::initResults()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::initResults()
 {
    const typename blaze::BaseElementType<RE>::Type min( randmin );
    const typename blaze::BaseElementType<RE>::Type max( randmax );
@@ -2238,9 +2238,9 @@ void OperationTest<VT1,VT2>::initResults()
 // This function is called before each transpose test case to initialize the according result
 // vectors to random values.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::initTransposeResults()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::initTransposeResults()
 {
    const typename blaze::BaseElementType<RE>::Type min( randmin );
    const typename blaze::BaseElementType<RE>::Type max( randmax );
@@ -2263,18 +2263,18 @@ void OperationTest<VT1,VT2>::initTransposeResults()
 // the function extends the given exception message by all available information for the failed
 // test.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void OperationTest<VT1,VT2>::convertException( const std::exception& ex )
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void OperationTest<VT1_,VT2_>::convertException( const std::exception& ex )
 {
    std::ostringstream oss;
    oss << " Test : " << test_ << "\n"
        << " Error: " << error_ << "\n"
        << " Details:\n"
        << "   Left-hand side sparse vector type:\n"
-       << "     " << typeid( VT1 ).name() << "\n"
+       << "     " << typeid( VT1_ ).name() << "\n"
        << "   Right-hand side sparse vector type:\n"
-       << "     " << typeid( VT2 ).name() << "\n"
+       << "     " << typeid( VT2_ ).name() << "\n"
        << "   Error message: " << ex.what() << "\n";
    throw std::runtime_error( oss.str() );
 }
@@ -2296,12 +2296,12 @@ void OperationTest<VT1,VT2>::convertException( const std::exception& ex )
 // \param creator2 The creator for the right-hand side sparse vector.
 // \return void
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-void runTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+void runTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 )
 {
    for( size_t rep=0; rep<repetitions; ++rep ) {
-      OperationTest<VT1,VT2>( creator1, creator2 );
+      OperationTest<VT1_,VT2_>( creator1, creator2 );
    }
 }
 //*************************************************************************************************
@@ -2319,8 +2319,8 @@ void runTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
 /*! \cond BLAZE_INTERNAL */
 /*!\brief Macro for the definition of a sparse vector/sparse vector cross product test case.
 */
-#define DEFINE_SVECSVECCROSS_OPERATION_TEST( VT1, VT2 ) \
-   extern template class blazetest::mathtest::svecsveccross::OperationTest<VT1,VT2>
+#define DEFINE_SVECSVECCROSS_OPERATION_TEST( VT1_, VT2_ ) \
+   extern template class blazetest::mathtest::svecsveccross::OperationTest<VT1_,VT2_>
 /*! \endcond */
 //*************************************************************************************************
 

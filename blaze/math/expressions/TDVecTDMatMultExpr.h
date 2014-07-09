@@ -411,8 +411,8 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized assignment of a transpose dense vector-
    // transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1 >  // Type of the target dense vector
-   friend inline void assign( DenseVector<VT1,true>& lhs, const TDVecTDMatMultExpr& rhs )
+   template< typename VT1_ >  // Type of the target dense vector
+   friend inline void assign( DenseVector<VT1_,true>& lhs, const TDVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -450,11 +450,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // \param A The right-hand side dense matrix operand.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename DisableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename DisableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       if( ( IsComputation<MT>::value && !evaluateMatrix ) ||
           ( A.rows() * A.columns() < TDVECTDMATMULT_THRESHOLD ) )
@@ -476,11 +476,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // \param A The right-hand side dense matrix operand.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       smpAssign( y, x * A );
    }
@@ -501,11 +501,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the default assignment kernel for the transpose dense vector-
    // transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1> >::Type
-      selectDefaultAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectDefaultAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       y.assign( x * A );
    }
@@ -526,11 +526,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the vectorized default assignment kernel for the transpose dense
    // vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1> >::Type
-      selectDefaultAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectDefaultAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef IntrinsicTrait<ElementType>  IT;
 
@@ -622,11 +622,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function relays to the default implementation of the assignment of a transpose dense
    // vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       selectDefaultAssignKernel( y, x, A );
    }
@@ -648,16 +648,16 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // single precision operands based on the BLAS cblas_sgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSinglePrecisionKernel<VT1,VT2,MT1> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSinglePrecisionKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -686,16 +686,16 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // double precision operands based on the BLAS cblas_dgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDoublePrecisionKernel<VT1,VT2,MT1> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDoublePrecisionKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -724,19 +724,19 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // single precision complex operands based on the BLAS cblas_cgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -767,19 +767,19 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // double precision complex operands based on the BLAS cblas_zgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -808,8 +808,8 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized assignment of a transpose dense vector-
    // transpose dense matrix multiplication expression to a sparse vector.
    */
-   template< typename VT1 >  // Type of the target sparse vector
-   friend inline void assign( SparseVector<VT1,true>& lhs, const TDVecTDMatMultExpr& rhs )
+   template< typename VT1_ >  // Type of the target sparse vector
+   friend inline void assign( SparseVector<VT1_,true>& lhs, const TDVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -838,8 +838,8 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized addition assignment of a transpose dense
    // vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1 >  // Type of the target dense vector
-   friend inline void addAssign( DenseVector<VT1,true>& lhs, const TDVecTDMatMultExpr& rhs )
+   template< typename VT1_ >  // Type of the target dense vector
+   friend inline void addAssign( DenseVector<VT1_,true>& lhs, const TDVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -873,11 +873,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // \param A The right-hand side dense matrix operand.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename DisableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename DisableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       if( ( IsComputation<MT>::value && !evaluateMatrix ) ||
           ( A.rows() * A.columns() < TDVECTDMATMULT_THRESHOLD ) )
@@ -899,11 +899,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // \param A The right-hand side dense matrix operand.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       smpAddAssign( y, x * A );
    }
@@ -924,11 +924,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the default addition assignment kernel for the transpose dense
    // vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1> >::Type
-      selectDefaultAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectDefaultAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       y.addAssign( x * A );
    }
@@ -949,11 +949,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the vectorized default addition assignment kernel for the transpose
    // dense vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1> >::Type
-      selectDefaultAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectDefaultAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef IntrinsicTrait<ElementType>  IT;
 
@@ -1045,11 +1045,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function relays to the default implementation of the addition assignment of a transpose
    // dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       selectDefaultAddAssignKernel( y, x, A );
    }
@@ -1071,16 +1071,16 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // single precision operands based on the BLAS cblas_sgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSinglePrecisionKernel<VT1,VT2,MT1> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSinglePrecisionKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -1109,16 +1109,16 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // double precision operands based on the BLAS cblas_dgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDoublePrecisionKernel<VT1,VT2,MT1> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDoublePrecisionKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -1147,19 +1147,19 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // single precision complex operands based on the BLAS cblas_cgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -1190,19 +1190,19 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // double precision complex operands based on the BLAS cblas_zgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -1235,8 +1235,8 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized subtraction assignment of a transpose
    // dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1 >  // Type of the target dense vector
-   friend inline void subAssign( DenseVector<VT1,true>& lhs, const TDVecTDMatMultExpr& rhs )
+   template< typename VT1_ >  // Type of the target dense vector
+   friend inline void subAssign( DenseVector<VT1_,true>& lhs, const TDVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -1270,11 +1270,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // \param A The right-hand side dense matrix operand.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename DisableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename DisableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       if( ( IsComputation<MT>::value && !evaluateMatrix ) ||
           ( A.rows() * A.columns() < TDVECTDMATMULT_THRESHOLD ) )
@@ -1296,11 +1296,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // \param A The right-hand side dense matrix operand.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       smpSubAssign( y, x * A );
    }
@@ -1321,11 +1321,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the default subtraction assignment kernel for the transpose dense
    // vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1> >::Type
-      selectDefaultSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectDefaultSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       y.subAssign( x * A );
    }
@@ -1346,11 +1346,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the vectorized default subtraction assignment kernel for the
    // transpose dense vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1> >::Type
-      selectDefaultSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectDefaultSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef IntrinsicTrait<ElementType>  IT;
 
@@ -1442,11 +1442,11 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function relays to the default implementation of the subtraction assignment of a
    // transpose dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       selectDefaultSubAssignKernel( y, x, A );
    }
@@ -1468,16 +1468,16 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // single precision operands based on the BLAS cblas_sgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSinglePrecisionKernel<VT1,VT2,MT1> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSinglePrecisionKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -1506,16 +1506,16 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // double precision operands based on the BLAS cblas_dgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDoublePrecisionKernel<VT1,VT2,MT1> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDoublePrecisionKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -1544,19 +1544,19 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // single precision complex operands based on the BLAS cblas_cgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -1587,19 +1587,19 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function performs the transpose dense vector-transpose dense matrix multiplication for
    // double precision complex operands based on the BLAS cblas_zgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -1632,8 +1632,8 @@ class TDVecTDMatMultExpr : public DenseVector< TDVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized subtraction assignment of a transpose
    // dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1 >  // Type of the target dense vector
-   friend inline void multAssign( DenseVector<VT1,true>& lhs, const TDVecTDMatMultExpr& rhs )
+   template< typename VT1_ >  // Type of the target dense vector
+   friend inline void multAssign( DenseVector<VT1_,true>& lhs, const TDVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -1966,9 +1966,9 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the performance optimized assignment of a scaled transpose dense
    // vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1  // Type of the target dense vector
+   template< typename VT1_  // Type of the target dense vector
            , bool TF >     // Transpose flag of the target dense vector
-   friend inline void assign( DenseVector<VT1,TF>& lhs, const DVecScalarMultExpr& rhs )
+   friend inline void assign( DenseVector<VT1_,TF>& lhs, const DVecScalarMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -2008,12 +2008,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // \param scalar The scaling factor.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename DisableIf< UseSMPAssignKernel<VT1,VT2,MT1,ST2> >::Type
-      selectAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename DisableIf< UseSMPAssignKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       if( ( IsComputation<MT>::value && !evaluateMatrix ) ||
           ( A.rows() * A.columns() < TDVECTDMATMULT_THRESHOLD ) )
@@ -2034,12 +2034,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // \param scalar The scaling factor.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1,ST2> >::Type
-      selectAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       smpAssign( y, x * A * scalar );
    }
@@ -2059,12 +2059,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the default assignment kernel for the scaled transpose dense vector-
    // transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectDefaultAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectDefaultAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       y.assign( x * A * scalar );
    }
@@ -2084,12 +2084,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the vectorized default assignment kernel for the scaled transpose
    // dense vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectDefaultAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectDefaultAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       typedef IntrinsicTrait<ElementType>  IT;
 
@@ -2179,12 +2179,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function relays to the default implementation of the assignment of a scaled transpose
    // dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       selectDefaultAssignKernel( y, x, A, scalar );
    }
@@ -2205,17 +2205,17 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function performs the scaled transpose dense vector-transpose dense matrix
    // multiplication for single precision operands based on the BLAS cblas_sgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSinglePrecisionKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSinglePrecisionKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -2243,17 +2243,17 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function performs the scaled transpose dense vector-transpose dense matrix
    // multiplication for double precision operands based on the BLAS cblas_dgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDoublePrecisionKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDoublePrecisionKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -2282,20 +2282,20 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // multiplication for single precision complex operands based on the BLAS cblas_cgemv()
    // function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -2326,20 +2326,20 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // multiplication for double precision complex operands based on the BLAS cblas_zgemv()
    // function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -2366,9 +2366,9 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the performance optimized assignment of a scaled transpose dense
    // vector-transpose dense matrix multiplication expression to a sparse vector.
    */
-   template< typename VT1  // Type of the target sparse vector
+   template< typename VT1_  // Type of the target sparse vector
            , bool TF >     // Transpose flag of the target sparse vector
-   friend inline void assign( SparseVector<VT1,TF>& lhs, const DVecScalarMultExpr& rhs )
+   friend inline void assign( SparseVector<VT1_,TF>& lhs, const DVecScalarMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -2395,9 +2395,9 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the performance optimized addition assignment of a scaled transpose
    // dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1  // Type of the target dense vector
+   template< typename VT1_  // Type of the target dense vector
            , bool TF >     // Transpose flag of the target dense vector
-   friend inline void addAssign( DenseVector<VT1,TF>& lhs, const DVecScalarMultExpr& rhs )
+   friend inline void addAssign( DenseVector<VT1_,TF>& lhs, const DVecScalarMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -2433,12 +2433,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // \param scalar The scaling factor.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename DisableIf< UseSMPAssignKernel<VT1,VT2,MT1,ST2> >::Type
-      selectAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename DisableIf< UseSMPAssignKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       if( ( IsComputation<MT>::value && !evaluateMatrix ) ||
           ( A.rows() * A.columns() < TDVECDMATMULT_THRESHOLD ) )
@@ -2459,12 +2459,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // \param scalar The scaling factor.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1,ST2> >::Type
-      selectAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       smpAddAssign( y, x * A * scalar );
    }
@@ -2484,12 +2484,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the default addition assignment kernel for the scaled transpose
    // dense vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectDefaultAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectDefaultAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       y.addAssign( x * A * scalar );
    }
@@ -2509,12 +2509,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the vectorized default addition assignment kernel for the scaled
    // transpose dense vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectDefaultAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectDefaultAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       typedef IntrinsicTrait<ElementType>  IT;
 
@@ -2605,12 +2605,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function relays to the default implementation of the addition assignment of a scaled
    // transpose dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       selectDefaultAddAssignKernel( y, x, A, scalar );
    }
@@ -2631,17 +2631,17 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function performs the scaled transpose dense vector-transpose dense matrix
    // multiplication for single precision operands based on the BLAS cblas_sgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSinglePrecisionKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSinglePrecisionKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -2669,17 +2669,17 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function performs the scaled transpose dense vector-transpose dense matrix
    // multiplication for double precision operands based on the BLAS cblas_dgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDoublePrecisionKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDoublePrecisionKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -2708,20 +2708,20 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // multiplication for single precision complex operands based on the BLAS cblas_cgemv()
    // function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -2752,20 +2752,20 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // multiplication for double precision complex operands based on the BLAS cblas_zgemv()
    // function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasAddAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -2796,9 +2796,9 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the performance optimized subtraction assignment of a scaled
    // transpose dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1  // Type of the target dense vector
+   template< typename VT1_  // Type of the target dense vector
            , bool TF >     // Transpose flag of the target dense vector
-   friend inline void subAssign( DenseVector<VT1,TF>& lhs, const DVecScalarMultExpr& rhs )
+   friend inline void subAssign( DenseVector<VT1_,TF>& lhs, const DVecScalarMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -2834,12 +2834,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // \param scalar The scaling factor.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename DisableIf< UseSMPAssignKernel<VT1,VT2,MT1,ST2> >::Type
-      selectSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename DisableIf< UseSMPAssignKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       if( ( IsComputation<MT>::value && !evaluateMatrix ) ||
           ( A.rows() * A.columns() < TDVECDMATMULT_THRESHOLD ) )
@@ -2860,12 +2860,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // \param scalar The scaling factor.
    // \return void
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1,ST2> >::Type
-      selectSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       smpSubAssign( y, x * A * scalar );
    }
@@ -2885,12 +2885,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the default subtraction assignment kernel for the scaled transpose
    // dense vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectDefaultSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename DisableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectDefaultSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       y.subAssign( x * A * scalar );
    }
@@ -2910,12 +2910,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the vectorized default subtraction assignment kernel for the scaled
    // transpose dense vector-transpose dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectDefaultSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseVectorizedDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectDefaultSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       typedef IntrinsicTrait<ElementType>  IT;
 
@@ -3007,12 +3007,12 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // scaled transpose dense vector-transpose dense matrix multiplication expression to a dense
    // vector.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       selectDefaultSubAssignKernel( y, x, A, scalar );
    }
@@ -3033,17 +3033,17 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function performs the scaled transpose dense vector-transpose dense matrix
    // multiplication for single precision operands based on the BLAS cblas_sgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSinglePrecisionKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSinglePrecisionKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -3071,17 +3071,17 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function performs the scaled transpose dense vector-transpose dense matrix
    // multiplication for double precision operands based on the BLAS cblas_dgemv() function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDoublePrecisionKernel<VT1,VT2,MT1,ST2> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDoublePrecisionKernel<VT1_,VT2_,MT1,ST2> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE( typename MT1::ElementType );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -3111,20 +3111,20 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // multiplication for single precision complex operands based on the BLAS cblas_cgemv()
    // function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseSinglePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_FLOAT_TYPE  ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -3156,20 +3156,20 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // multiplication for double precision complex operands based on the BLAS cblas_zgemv()
    // function.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1    // Type of the right-hand side matrix operand
            , typename ST2 >  // Type of the scalar value
-   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1,VT2,MT1> >::Type
-      selectBlasSubAssignKernel( VT1& y, const VT2& x, const MT1& A, ST2 scalar )
+   static inline typename EnableIf< UseDoublePrecisionComplexKernel<VT1_,VT2_,MT1> >::Type
+      selectBlasSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A, ST2 scalar )
    {
       using boost::numeric_cast;
 
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT1_::ElementType );
+      BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename VT2_::ElementType );
       BLAZE_CONSTRAINT_MUST_BE_COMPLEX_TYPE( typename MT1::ElementType );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1::ElementType::value_type );
-      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT1_::ElementType::value_type );
+      BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename VT2_::ElementType::value_type );
       BLAZE_CONSTRAINT_MUST_BE_DOUBLE_TYPE ( typename MT1::ElementType::value_type );
 
       const int M  ( numeric_cast<int>( A.rows() )    );
@@ -3200,9 +3200,9 @@ class DVecScalarMultExpr< TDVecTDMatMultExpr<VT,MT>, ST, true >
    // This function implements the performance optimized subtraction assignment of a scaled
    // transpose dense vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT1  // Type of the target dense vector
+   template< typename VT1_  // Type of the target dense vector
            , bool TF >     // Transpose flag of the target dense vector
-   friend inline void multAssign( DenseVector<VT1,TF>& lhs, const DVecScalarMultExpr& rhs )
+   friend inline void multAssign( DenseVector<VT1_,TF>& lhs, const DVecScalarMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 

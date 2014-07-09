@@ -109,17 +109,17 @@ struct Vector
 template< typename VT, bool TF >
 inline size_t size( const Vector<VT,TF>& v );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void assign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void assign( Vector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void addAssign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void addAssign( Vector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void subAssign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void subAssign( Vector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void multAssign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void multAssign( Vector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 //@}
 //*************************************************************************************************
 
@@ -154,11 +154,11 @@ inline size_t size( Vector<VT,TF>& v )
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side vector
+template< typename VT1_  // Type of the left-hand side vector
         , bool TF1      // Transpose flag of the left-hand side vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void assign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void assign( Vector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -182,11 +182,11 @@ inline void assign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side vector
+template< typename VT1_  // Type of the left-hand side vector
         , bool TF1      // Transpose flag of the left-hand side vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void addAssign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void addAssign( Vector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -210,11 +210,11 @@ inline void addAssign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side vector
+template< typename VT1_  // Type of the left-hand side vector
         , bool TF1      // Transpose flag of the left-hand side vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void subAssign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void subAssign( Vector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -238,11 +238,11 @@ inline void subAssign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side vector
+template< typename VT1_  // Type of the left-hand side vector
         , bool TF1      // Transpose flag of the left-hand side vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void multAssign( Vector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void multAssign( Vector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 

@@ -756,10 +756,10 @@ class DenseSubvector : public DenseVector< DenseSubvector<VT,AF,TF>, TF >
    //@{
                             inline DenseSubvector& operator= ( const ElementType& rhs );
                             inline DenseSubvector& operator= ( const DenseSubvector& rhs );
-   template< typename VT2 > inline DenseSubvector& operator= ( const Vector<VT2,TF>& rhs );
-   template< typename VT2 > inline DenseSubvector& operator+=( const Vector<VT2,TF>& rhs );
-   template< typename VT2 > inline DenseSubvector& operator-=( const Vector<VT2,TF>& rhs );
-   template< typename VT2 > inline DenseSubvector& operator*=( const Vector<VT2,TF>& rhs );
+   template< typename VT2_ > inline DenseSubvector& operator= ( const Vector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline DenseSubvector& operator+=( const Vector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline DenseSubvector& operator-=( const Vector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline DenseSubvector& operator*=( const Vector<VT2_,TF>& rhs );
 
    template< typename Other >
    inline typename EnableIf< IsNumeric<Other>, DenseSubvector >::Type&
@@ -786,10 +786,10 @@ class DenseSubvector : public DenseVector< DenseSubvector<VT,AF,TF>, TF >
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct VectorizedAssign {
-      enum { value = vectorizable && VT2::vectorizable &&
-                     IsSame<ElementType,typename VT2::ElementType>::value };
+      enum { value = vectorizable && VT2_::vectorizable &&
+                     IsSame<ElementType,typename VT2_::ElementType>::value };
    };
    /*! \endcond */
    //**********************************************************************************************
@@ -797,10 +797,10 @@ class DenseSubvector : public DenseVector< DenseSubvector<VT,AF,TF>, TF >
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct VectorizedAddAssign {
-      enum { value = vectorizable && VT2::vectorizable &&
-                     IsSame<ElementType,typename VT2::ElementType>::value &&
+      enum { value = vectorizable && VT2_::vectorizable &&
+                     IsSame<ElementType,typename VT2_::ElementType>::value &&
                      IntrinsicTrait<ElementType>::addition };
    };
    /*! \endcond */
@@ -809,10 +809,10 @@ class DenseSubvector : public DenseVector< DenseSubvector<VT,AF,TF>, TF >
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct VectorizedSubAssign {
-      enum { value = vectorizable && VT2::vectorizable &&
-                     IsSame<ElementType,typename VT2::ElementType>::value &&
+      enum { value = vectorizable && VT2_::vectorizable &&
+                     IsSame<ElementType,typename VT2_::ElementType>::value &&
                      IntrinsicTrait<ElementType>::subtraction };
    };
    /*! \endcond */
@@ -821,10 +821,10 @@ class DenseSubvector : public DenseVector< DenseSubvector<VT,AF,TF>, TF >
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct VectorizedMultAssign {
-      enum { value = vectorizable && VT2::vectorizable &&
-                     IsSame<ElementType,typename VT2::ElementType>::value &&
+      enum { value = vectorizable && VT2_::vectorizable &&
+                     IsSame<ElementType,typename VT2_::ElementType>::value &&
                      IntrinsicTrait<ElementType>::multiplication };
    };
    /*! \endcond */
@@ -846,45 +846,45 @@ class DenseSubvector : public DenseVector< DenseSubvector<VT,AF,TF>, TF >
    inline void          storeu( size_t index, const IntrinsicType& value );
    inline void          stream( size_t index, const IntrinsicType& value );
 
-   template< typename VT2 >
-   inline typename DisableIf< VectorizedAssign<VT2> >::Type
-      assign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename DisableIf< VectorizedAssign<VT2_> >::Type
+      assign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename EnableIf< VectorizedAssign<VT2> >::Type
-      assign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename EnableIf< VectorizedAssign<VT2_> >::Type
+      assign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 > inline void assign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ > inline void assign( const SparseVector<VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename DisableIf< VectorizedAddAssign<VT2> >::Type
-      addAssign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename DisableIf< VectorizedAddAssign<VT2_> >::Type
+      addAssign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename EnableIf< VectorizedAddAssign<VT2> >::Type
-      addAssign ( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename EnableIf< VectorizedAddAssign<VT2_> >::Type
+      addAssign ( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 > inline void addAssign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ > inline void addAssign( const SparseVector<VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename DisableIf< VectorizedSubAssign<VT2> >::Type
-      subAssign ( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename DisableIf< VectorizedSubAssign<VT2_> >::Type
+      subAssign ( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename EnableIf< VectorizedSubAssign<VT2> >::Type
-      subAssign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename EnableIf< VectorizedSubAssign<VT2_> >::Type
+      subAssign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 > inline void subAssign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ > inline void subAssign( const SparseVector<VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename DisableIf< VectorizedMultAssign<VT2> >::Type
-      multAssign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename DisableIf< VectorizedMultAssign<VT2_> >::Type
+      multAssign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename EnableIf< VectorizedMultAssign<VT2> >::Type
-      multAssign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename EnableIf< VectorizedMultAssign<VT2_> >::Type
+      multAssign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 > inline void multAssign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ > inline void multAssign( const SparseVector<VT2_,TF>& rhs );
    //@}
    //**********************************************************************************************
 
@@ -916,9 +916,9 @@ class DenseSubvector : public DenseVector< DenseSubvector<VT,AF,TF>, TF >
 
    //**Friend declarations*************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   template< bool AF1, typename VT2, bool AF2, bool TF2 >
-   friend const DenseSubvector<VT2,AF1,TF2>
-      subvector( const DenseSubvector<VT2,AF2,TF2>& dv, size_t index, size_t size );
+   template< bool AF1, typename VT2_, bool AF2, bool TF2 >
+   friend const DenseSubvector<VT2_,AF1,TF2>
+      subvector( const DenseSubvector<VT2_,AF2,TF2>& dv, size_t index, size_t size );
    /*! \endcond */
    //**********************************************************************************************
 
@@ -1238,21 +1238,21 @@ inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator=( const Dens
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
-inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator=( const Vector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side vector
+inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator=( const Vector<VT2_,TF>& rhs )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
    if( (~rhs).canAlias( &vector_ ) ) {
-      const typename VT2::ResultType tmp( ~rhs );
+      const typename VT2_::ResultType tmp( ~rhs );
       smpAssign( *this, tmp );
    }
    else {
-      if( IsSparseVector<VT2>::value )
+      if( IsSparseVector<VT2_>::value )
          reset();
       smpAssign( *this, ~rhs );
    }
@@ -1275,17 +1275,17 @@ inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator=( const Vect
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
-inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator+=( const Vector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side vector
+inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator+=( const Vector<VT2_,TF>& rhs )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
    if( (~rhs).canAlias( &vector_ ) ) {
-      const typename VT2::ResultType tmp( ~rhs );
+      const typename VT2_::ResultType tmp( ~rhs );
       smpAddAssign( *this, tmp );
    }
    else {
@@ -1310,17 +1310,17 @@ inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator+=( const Vec
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
-inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator-=( const Vector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side vector
+inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator-=( const Vector<VT2_,TF>& rhs )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
    if( (~rhs).canAlias( &vector_ ) ) {
-      const typename VT2::ResultType tmp( ~rhs );
+      const typename VT2_::ResultType tmp( ~rhs );
       smpSubAssign( *this, tmp );
    }
    else {
@@ -1346,17 +1346,17 @@ inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator-=( const Vec
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
-inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator*=( const Vector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side vector
+inline DenseSubvector<VT,AF,TF>& DenseSubvector<VT,AF,TF>::operator*=( const Vector<VT2_,TF>& rhs )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
-   if( (~rhs).canAlias( &vector_ ) || IsSparseVector<VT2>::value ) {
-      const typename VT2::ResultType tmp( ~rhs );
+   if( (~rhs).canAlias( &vector_ ) || IsSparseVector<VT2_>::value ) {
+      const typename VT2_::ResultType tmp( ~rhs );
       smpMultAssign( *this, tmp );
    }
    else {
@@ -1762,9 +1762,9 @@ inline void DenseSubvector<VT,AF,TF>::stream( size_t index, const IntrinsicType&
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedAssign<VT2> >::Type
-   DenseSubvector<VT,AF,TF>::assign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedAssign<VT2_> >::Type
+   DenseSubvector<VT,AF,TF>::assign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -1794,9 +1794,9 @@ inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vec
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedAssign<VT2> >::Type
-   DenseSubvector<VT,AF,TF>::assign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedAssign<VT2_> >::Type
+   DenseSubvector<VT,AF,TF>::assign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -1815,7 +1815,7 @@ inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vect
       const size_t iend( size_ & size_t(-IT::size*4) );
       BLAZE_INTERNAL_ASSERT( ( size_ - ( size_ % (IT::size*4UL) ) ) == iend, "Invalid end calculation" );
 
-      typename VT2::ConstIterator it( (~rhs).begin() );
+      typename VT2_::ConstIterator it( (~rhs).begin() );
       for( size_t i=0UL; i<iend; i+=IT::size*4UL ) {
          vector_.storeu( offset_+i             , it.load() ); it += IT::size;
          vector_.storeu( offset_+i+IT::size    , it.load() ); it += IT::size;
@@ -1844,12 +1844,12 @@ inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vect
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void DenseSubvector<VT,AF,TF>::assign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void DenseSubvector<VT,AF,TF>::assign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
       vector_[element->index()+offset_] = element->value();
 }
 //*************************************************************************************************
@@ -1869,9 +1869,9 @@ inline void DenseSubvector<VT,AF,TF>::assign( const SparseVector<VT2,TF>& rhs )
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedAddAssign<VT2> >::Type
-   DenseSubvector<VT,AF,TF>::addAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedAddAssign<VT2_> >::Type
+   DenseSubvector<VT,AF,TF>::addAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -1901,9 +1901,9 @@ inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vec
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedAddAssign<VT2> >::Type
-   DenseSubvector<VT,AF,TF>::addAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedAddAssign<VT2_> >::Type
+   DenseSubvector<VT,AF,TF>::addAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -1912,7 +1912,7 @@ inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vect
    const size_t iend( size_ & size_t(-IT::size*4) );
    BLAZE_INTERNAL_ASSERT( ( size_ - ( size_ % (IT::size*4UL) ) ) == iend, "Invalid end calculation" );
 
-   typename VT2::ConstIterator it( (~rhs).begin() );
+   typename VT2_::ConstIterator it( (~rhs).begin() );
    for( size_t i=0UL; i<iend; i+=IT::size*4UL ) {
       vector_.storeu( offset_+i             , load(i             ) + it.load() ); it += IT::size;
       vector_.storeu( offset_+i+IT::size    , load(i+IT::size    ) + it.load() ); it += IT::size;
@@ -1940,12 +1940,12 @@ inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vect
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void DenseSubvector<VT,AF,TF>::addAssign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void DenseSubvector<VT,AF,TF>::addAssign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
       vector_[element->index()+offset_] += element->value();
 }
 //*************************************************************************************************
@@ -1965,9 +1965,9 @@ inline void DenseSubvector<VT,AF,TF>::addAssign( const SparseVector<VT2,TF>& rhs
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedSubAssign<VT2> >::Type
-   DenseSubvector<VT,AF,TF>::subAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedSubAssign<VT2_> >::Type
+   DenseSubvector<VT,AF,TF>::subAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -1997,9 +1997,9 @@ inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vec
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedSubAssign<VT2> >::Type
-   DenseSubvector<VT,AF,TF>::subAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedSubAssign<VT2_> >::Type
+   DenseSubvector<VT,AF,TF>::subAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -2008,7 +2008,7 @@ inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vect
    const size_t iend( size_ & size_t(-IT::size*4) );
    BLAZE_INTERNAL_ASSERT( ( size_ - ( size_ % (IT::size*4UL) ) ) == iend, "Invalid end calculation" );
 
-   typename VT2::ConstIterator it( (~rhs).begin() );
+   typename VT2_::ConstIterator it( (~rhs).begin() );
    for( size_t i=0UL; i<iend; i+=IT::size*4UL ) {
       vector_.storeu( offset_+i             , load(i             ) - it.load() ); it += IT::size;
       vector_.storeu( offset_+i+IT::size    , load(i+IT::size    ) - it.load() ); it += IT::size;
@@ -2036,12 +2036,12 @@ inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vect
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void DenseSubvector<VT,AF,TF>::subAssign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void DenseSubvector<VT,AF,TF>::subAssign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
       vector_[element->index()+offset_] -= element->value();
 }
 //*************************************************************************************************
@@ -2061,9 +2061,9 @@ inline void DenseSubvector<VT,AF,TF>::subAssign( const SparseVector<VT2,TF>& rhs
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedMultAssign<VT2> >::Type
-   DenseSubvector<VT,AF,TF>::multAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedMultAssign<VT2_> >::Type
+   DenseSubvector<VT,AF,TF>::multAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -2093,9 +2093,9 @@ inline typename DisableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vec
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedMultAssign<VT2> >::Type
-   DenseSubvector<VT,AF,TF>::multAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE VectorizedMultAssign<VT2_> >::Type
+   DenseSubvector<VT,AF,TF>::multAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -2104,7 +2104,7 @@ inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vect
    const size_t iend( size_ & size_t(-IT::size*4) );
    BLAZE_INTERNAL_ASSERT( ( size_ - ( size_ % (IT::size*4UL) ) ) == iend, "Invalid end calculation" );
 
-   typename VT2::ConstIterator it( (~rhs).begin() );
+   typename VT2_::ConstIterator it( (~rhs).begin() );
    for( size_t i=0UL; i<iend; i+=IT::size*4UL ) {
       vector_.storeu( offset_+i             , load(i             ) * it.load() ); it += IT::size;
       vector_.storeu( offset_+i+IT::size    , load(i+IT::size    ) * it.load() ); it += IT::size;
@@ -2132,8 +2132,8 @@ inline typename EnableIf< typename DenseSubvector<VT,AF,TF>::BLAZE_TEMPLATE Vect
 template< typename VT     // Type of the dense vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void DenseSubvector<VT,AF,TF>::multAssign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void DenseSubvector<VT,AF,TF>::multAssign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -2141,7 +2141,7 @@ inline void DenseSubvector<VT,AF,TF>::multAssign( const SparseVector<VT2,TF>& rh
 
    reset();
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
       vector_[element->index()+offset_] = tmp[element->index()] * element->value();
 }
 //*************************************************************************************************
@@ -2262,10 +2262,10 @@ class DenseSubvector<VT,aligned,TF> : public DenseVector< DenseSubvector<VT,alig
    //@{
                             inline DenseSubvector& operator= ( const ElementType& rhs );
                             inline DenseSubvector& operator= ( const DenseSubvector& rhs );
-   template< typename VT2 > inline DenseSubvector& operator= ( const Vector<VT2,TF>& rhs );
-   template< typename VT2 > inline DenseSubvector& operator+=( const Vector<VT2,TF>& rhs );
-   template< typename VT2 > inline DenseSubvector& operator-=( const Vector<VT2,TF>& rhs );
-   template< typename VT2 > inline DenseSubvector& operator*=( const Vector<VT2,TF>& rhs );
+   template< typename VT2_ > inline DenseSubvector& operator= ( const Vector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline DenseSubvector& operator+=( const Vector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline DenseSubvector& operator-=( const Vector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline DenseSubvector& operator*=( const Vector<VT2_,TF>& rhs );
 
    template< typename Other >
    inline typename EnableIf< IsNumeric<Other>, DenseSubvector >::Type&
@@ -2291,39 +2291,39 @@ class DenseSubvector<VT,aligned,TF> : public DenseVector< DenseSubvector<VT,alig
  private:
    //**********************************************************************************************
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct VectorizedAssign {
-      enum { value = vectorizable && VT2::vectorizable &&
-                     IsSame<ElementType,typename VT2::ElementType>::value };
+      enum { value = vectorizable && VT2_::vectorizable &&
+                     IsSame<ElementType,typename VT2_::ElementType>::value };
    };
    //**********************************************************************************************
 
    //**********************************************************************************************
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct VectorizedAddAssign {
-      enum { value = vectorizable && VT2::vectorizable &&
-                     IsSame<ElementType,typename VT2::ElementType>::value &&
+      enum { value = vectorizable && VT2_::vectorizable &&
+                     IsSame<ElementType,typename VT2_::ElementType>::value &&
                      IntrinsicTrait<ElementType>::addition };
    };
    //**********************************************************************************************
 
    //**********************************************************************************************
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct VectorizedSubAssign {
-      enum { value = vectorizable && VT2::vectorizable &&
-                     IsSame<ElementType,typename VT2::ElementType>::value &&
+      enum { value = vectorizable && VT2_::vectorizable &&
+                     IsSame<ElementType,typename VT2_::ElementType>::value &&
                      IntrinsicTrait<ElementType>::subtraction };
    };
    //**********************************************************************************************
 
    //**********************************************************************************************
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct VectorizedMultAssign {
-      enum { value = vectorizable && VT2::vectorizable &&
-                     IsSame<ElementType,typename VT2::ElementType>::value &&
+      enum { value = vectorizable && VT2_::vectorizable &&
+                     IsSame<ElementType,typename VT2_::ElementType>::value &&
                      IntrinsicTrait<ElementType>::multiplication };
    };
    //**********************************************************************************************
@@ -2344,45 +2344,45 @@ class DenseSubvector<VT,aligned,TF> : public DenseVector< DenseSubvector<VT,alig
    inline void          storeu( size_t index, const IntrinsicType& value );
    inline void          stream( size_t index, const IntrinsicType& value );
 
-   template< typename VT2 >
-   inline typename DisableIf< VectorizedAssign<VT2> >::Type
-      assign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename DisableIf< VectorizedAssign<VT2_> >::Type
+      assign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename EnableIf< VectorizedAssign<VT2> >::Type
-      assign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename EnableIf< VectorizedAssign<VT2_> >::Type
+      assign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 > inline void assign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ > inline void assign( const SparseVector<VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename DisableIf< VectorizedAddAssign<VT2> >::Type
-      addAssign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename DisableIf< VectorizedAddAssign<VT2_> >::Type
+      addAssign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename EnableIf< VectorizedAddAssign<VT2> >::Type
-      addAssign ( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename EnableIf< VectorizedAddAssign<VT2_> >::Type
+      addAssign ( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 > inline void addAssign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ > inline void addAssign( const SparseVector<VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename DisableIf< VectorizedSubAssign<VT2> >::Type
-      subAssign ( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename DisableIf< VectorizedSubAssign<VT2_> >::Type
+      subAssign ( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename EnableIf< VectorizedSubAssign<VT2> >::Type
-      subAssign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename EnableIf< VectorizedSubAssign<VT2_> >::Type
+      subAssign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 > inline void subAssign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ > inline void subAssign( const SparseVector<VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename DisableIf< VectorizedMultAssign<VT2> >::Type
-      multAssign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename DisableIf< VectorizedMultAssign<VT2_> >::Type
+      multAssign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 >
-   inline typename EnableIf< VectorizedMultAssign<VT2> >::Type
-      multAssign( const DenseVector <VT2,TF>& rhs );
+   template< typename VT2_ >
+   inline typename EnableIf< VectorizedMultAssign<VT2_> >::Type
+      multAssign( const DenseVector <VT2_,TF>& rhs );
 
-   template< typename VT2 > inline void multAssign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ > inline void multAssign( const SparseVector<VT2_,TF>& rhs );
    //@}
    //**********************************************************************************************
 
@@ -2397,9 +2397,9 @@ class DenseSubvector<VT,aligned,TF> : public DenseVector< DenseSubvector<VT,alig
    //**********************************************************************************************
 
    //**Friend declarations*************************************************************************
-   template< bool AF1, typename VT2, bool AF2, bool TF2 >
-   friend const DenseSubvector<VT2,AF1,TF2>
-      subvector( const DenseSubvector<VT2,AF2,TF2>& dv, size_t index, size_t size );
+   template< bool AF1, typename VT2_, bool AF2, bool TF2 >
+   friend const DenseSubvector<VT2_,AF1,TF2>
+      subvector( const DenseSubvector<VT2_,AF2,TF2>& dv, size_t index, size_t size );
    //**********************************************************************************************
 
    //**Compile time checks*************************************************************************
@@ -2729,22 +2729,22 @@ inline DenseSubvector<VT,aligned,TF>&
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
+template< typename VT2_ >  // Type of the right-hand side vector
 inline DenseSubvector<VT,aligned,TF>&
-   DenseSubvector<VT,aligned,TF>::operator=( const Vector<VT2,TF>& rhs )
+   DenseSubvector<VT,aligned,TF>::operator=( const Vector<VT2_,TF>& rhs )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
    if( (~rhs).canAlias( &vector_ ) ) {
-      const typename VT2::ResultType tmp( ~rhs );
+      const typename VT2_::ResultType tmp( ~rhs );
       smpAssign( *this, tmp );
    }
    else {
-      if( IsSparseVector<VT2>::value )
+      if( IsSparseVector<VT2_>::value )
          reset();
       smpAssign( *this, ~rhs );
    }
@@ -2768,18 +2768,18 @@ inline DenseSubvector<VT,aligned,TF>&
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
+template< typename VT2_ >  // Type of the right-hand side vector
 inline DenseSubvector<VT,aligned,TF>&
-   DenseSubvector<VT,aligned,TF>::operator+=( const Vector<VT2,TF>& rhs )
+   DenseSubvector<VT,aligned,TF>::operator+=( const Vector<VT2_,TF>& rhs )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
    if( (~rhs).canAlias( &vector_ ) ) {
-      const typename VT2::ResultType tmp( ~rhs );
+      const typename VT2_::ResultType tmp( ~rhs );
       smpAddAssign( *this, tmp );
    }
    else {
@@ -2805,18 +2805,18 @@ inline DenseSubvector<VT,aligned,TF>&
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
+template< typename VT2_ >  // Type of the right-hand side vector
 inline DenseSubvector<VT,aligned,TF>&
-   DenseSubvector<VT,aligned,TF>::operator-=( const Vector<VT2,TF>& rhs )
+   DenseSubvector<VT,aligned,TF>::operator-=( const Vector<VT2_,TF>& rhs )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
    if( (~rhs).canAlias( &vector_ ) ) {
-      const typename VT2::ResultType tmp( ~rhs );
+      const typename VT2_::ResultType tmp( ~rhs );
       smpSubAssign( *this, tmp );
    }
    else {
@@ -2843,18 +2843,18 @@ inline DenseSubvector<VT,aligned,TF>&
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
+template< typename VT2_ >  // Type of the right-hand side vector
 inline DenseSubvector<VT,aligned,TF>&
-   DenseSubvector<VT,aligned,TF>::operator*=( const Vector<VT2,TF>& rhs )
+   DenseSubvector<VT,aligned,TF>::operator*=( const Vector<VT2_,TF>& rhs )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
-   if( (~rhs).canAlias( &vector_ ) || IsSparseVector<VT2>::value ) {
-      const typename VT2::ResultType tmp( ~rhs );
+   if( (~rhs).canAlias( &vector_ ) || IsSparseVector<VT2_>::value ) {
+      const typename VT2_::ResultType tmp( ~rhs );
       smpMultAssign( *this, tmp );
    }
    else {
@@ -3278,9 +3278,9 @@ inline void DenseSubvector<VT,aligned,TF>::stream( size_t index, const Intrinsic
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedAssign<VT2> >::Type
-   DenseSubvector<VT,aligned,TF>::assign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedAssign<VT2_> >::Type
+   DenseSubvector<VT,aligned,TF>::assign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3311,9 +3311,9 @@ inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLAT
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedAssign<VT2> >::Type
-   DenseSubvector<VT,aligned,TF>::assign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedAssign<VT2_> >::Type
+   DenseSubvector<VT,aligned,TF>::assign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3330,7 +3330,7 @@ inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE
       const size_t iend( size_ & size_t(-IT::size*4) );
       BLAZE_INTERNAL_ASSERT( ( size_ - ( size_ % (IT::size*4UL) ) ) == iend, "Invalid end calculation" );
 
-      typename VT2::ConstIterator it( (~rhs).begin() );
+      typename VT2_::ConstIterator it( (~rhs).begin() );
       for( size_t i=0UL; i<iend; i+=IT::size*4UL ) {
          store( i             , it.load() ); it += IT::size;
          store( i+IT::size    , it.load() ); it += IT::size;
@@ -3360,12 +3360,12 @@ inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void DenseSubvector<VT,aligned,TF>::assign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void DenseSubvector<VT,aligned,TF>::assign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
       vector_[element->index()+offset_] = element->value();
 }
 /*! \endcond */
@@ -3386,9 +3386,9 @@ inline void DenseSubvector<VT,aligned,TF>::assign( const SparseVector<VT2,TF>& r
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedAddAssign<VT2> >::Type
-   DenseSubvector<VT,aligned,TF>::addAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedAddAssign<VT2_> >::Type
+   DenseSubvector<VT,aligned,TF>::addAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3419,9 +3419,9 @@ inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLAT
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedAddAssign<VT2> >::Type
-   DenseSubvector<VT,aligned,TF>::addAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedAddAssign<VT2_> >::Type
+   DenseSubvector<VT,aligned,TF>::addAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3430,7 +3430,7 @@ inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE
    const size_t iend( size_ & size_t(-IT::size*4) );
    BLAZE_INTERNAL_ASSERT( ( size_ - ( size_ % (IT::size*4UL) ) ) == iend, "Invalid end calculation" );
 
-   typename VT2::ConstIterator it( (~rhs).begin() );
+   typename VT2_::ConstIterator it( (~rhs).begin() );
    for( size_t i=0UL; i<iend; i+=IT::size*4UL ) {
       store( i             , load(i             ) + it.load() ); it += IT::size;
       store( i+IT::size    , load(i+IT::size    ) + it.load() ); it += IT::size;
@@ -3459,12 +3459,12 @@ inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void DenseSubvector<VT,aligned,TF>::addAssign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void DenseSubvector<VT,aligned,TF>::addAssign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
       vector_[element->index()+offset_] += element->value();
 }
 /*! \endcond */
@@ -3485,9 +3485,9 @@ inline void DenseSubvector<VT,aligned,TF>::addAssign( const SparseVector<VT2,TF>
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedSubAssign<VT2> >::Type
-   DenseSubvector<VT,aligned,TF>::subAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedSubAssign<VT2_> >::Type
+   DenseSubvector<VT,aligned,TF>::subAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3518,9 +3518,9 @@ inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLAT
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedSubAssign<VT2> >::Type
-   DenseSubvector<VT,aligned,TF>::subAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedSubAssign<VT2_> >::Type
+   DenseSubvector<VT,aligned,TF>::subAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3529,7 +3529,7 @@ inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE
    const size_t iend( size_ & size_t(-IT::size*4) );
    BLAZE_INTERNAL_ASSERT( ( size_ - ( size_ % (IT::size*4UL) ) ) == iend, "Invalid end calculation" );
 
-   typename VT2::ConstIterator it( (~rhs).begin() );
+   typename VT2_::ConstIterator it( (~rhs).begin() );
    for( size_t i=0UL; i<iend; i+=IT::size*4UL ) {
       store( i             , load(i             ) - it.load() ); it += IT::size;
       store( i+IT::size    , load(i+IT::size    ) - it.load() ); it += IT::size;
@@ -3558,12 +3558,12 @@ inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void DenseSubvector<VT,aligned,TF>::subAssign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void DenseSubvector<VT,aligned,TF>::subAssign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
       vector_[element->index()+offset_] -= element->value();
 }
 /*! \endcond */
@@ -3584,9 +3584,9 @@ inline void DenseSubvector<VT,aligned,TF>::subAssign( const SparseVector<VT2,TF>
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedMultAssign<VT2> >::Type
-   DenseSubvector<VT,aligned,TF>::multAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedMultAssign<VT2_> >::Type
+   DenseSubvector<VT,aligned,TF>::multAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3617,9 +3617,9 @@ inline typename DisableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLAT
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedMultAssign<VT2> >::Type
-   DenseSubvector<VT,aligned,TF>::multAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE VectorizedMultAssign<VT2_> >::Type
+   DenseSubvector<VT,aligned,TF>::multAssign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3628,7 +3628,7 @@ inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE
    const size_t iend( size_ & size_t(-IT::size*4) );
    BLAZE_INTERNAL_ASSERT( ( size_ - ( size_ % (IT::size*4UL) ) ) == iend, "Invalid end calculation" );
 
-   typename VT2::ConstIterator it( (~rhs).begin() );
+   typename VT2_::ConstIterator it( (~rhs).begin() );
    for( size_t i=0UL; i<iend; i+=IT::size*4UL ) {
       store( i             , load(i             ) * it.load() ); it += IT::size;
       store( i+IT::size    , load(i+IT::size    ) * it.load() ); it += IT::size;
@@ -3657,8 +3657,8 @@ inline typename EnableIf< typename DenseSubvector<VT,aligned,TF>::BLAZE_TEMPLATE
 */
 template< typename VT     // Type of the dense vector
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void DenseSubvector<VT,aligned,TF>::multAssign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void DenseSubvector<VT,aligned,TF>::multAssign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -3666,7 +3666,7 @@ inline void DenseSubvector<VT,aligned,TF>::multAssign( const SparseVector<VT2,TF
 
    reset();
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
       vector_[element->index()+offset_] = tmp[element->index()] * element->value();
 }
 /*! \endcond */
@@ -3693,15 +3693,15 @@ inline void DenseSubvector<VT,aligned,TF>::multAssign( const SparseVector<VT2,TF
 // This specialization of DenseSubvector adapts the class template to the special case of
 // dense vector/dense vector cross products.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-class DenseSubvector< DVecDVecCrossExpr<VT1,VT2>, unaligned, false >
-   : public DenseVector< DenseSubvector< DVecDVecCrossExpr<VT1,VT2>, unaligned, false >, false >
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+class DenseSubvector< DVecDVecCrossExpr<VT1_,VT2_>, unaligned, false >
+   : public DenseVector< DenseSubvector< DVecDVecCrossExpr<VT1_,VT2_>, unaligned, false >, false >
    , private Subvector
 {
  private:
    //**Type definitions****************************************************************************
-   typedef DVecDVecCrossExpr<VT1,VT2>  CPE;  //!< Type of the cross product expression.
+   typedef DVecDVecCrossExpr<VT1_,VT2_>  CPE;  //!< Type of the cross product expression.
    typedef typename CPE::ResultType    RT;   //!< Result type of the cross product expression.
    //**********************************************************************************************
 
@@ -3823,15 +3823,15 @@ class DenseSubvector< DVecDVecCrossExpr<VT1,VT2>, unaligned, false >
 // This specialization of DenseSubvector adapts the class template to the special case of
 // dense vector/sparse vector cross products.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-class DenseSubvector< DVecSVecCrossExpr<VT1,VT2>, unaligned, false >
-   : public DenseVector< DenseSubvector< DVecSVecCrossExpr<VT1,VT2>, unaligned, false >, false >
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+class DenseSubvector< DVecSVecCrossExpr<VT1_,VT2_>, unaligned, false >
+   : public DenseVector< DenseSubvector< DVecSVecCrossExpr<VT1_,VT2_>, unaligned, false >, false >
    , private Subvector
 {
  private:
    //**Type definitions****************************************************************************
-   typedef DVecSVecCrossExpr<VT1,VT2>  CPE;  //!< Type of the cross product expression.
+   typedef DVecSVecCrossExpr<VT1_,VT2_>  CPE;  //!< Type of the cross product expression.
    typedef typename CPE::ResultType    RT;   //!< Result type of the cross product expression.
    //**********************************************************************************************
 
@@ -3953,15 +3953,15 @@ class DenseSubvector< DVecSVecCrossExpr<VT1,VT2>, unaligned, false >
 // This specialization of DenseSubvector adapts the class template to the special case of
 // sparse vector/dense vector cross products.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-class DenseSubvector< SVecDVecCrossExpr<VT1,VT2>, unaligned, false >
-   : public DenseVector< DenseSubvector< SVecDVecCrossExpr<VT1,VT2>, unaligned, false >, false >
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+class DenseSubvector< SVecDVecCrossExpr<VT1_,VT2_>, unaligned, false >
+   : public DenseVector< DenseSubvector< SVecDVecCrossExpr<VT1_,VT2_>, unaligned, false >, false >
    , private Subvector
 {
  private:
    //**Type definitions****************************************************************************
-   typedef SVecDVecCrossExpr<VT1,VT2>  CPE;  //!< Type of the cross product expression.
+   typedef SVecDVecCrossExpr<VT1_,VT2_>  CPE;  //!< Type of the cross product expression.
    typedef typename CPE::ResultType    RT;   //!< Result type of the cross product expression.
    //**********************************************************************************************
 
@@ -4083,15 +4083,15 @@ class DenseSubvector< SVecDVecCrossExpr<VT1,VT2>, unaligned, false >
 // This specialization of DenseSubvector adapts the class template to the special case of
 // sparse vector/sparse vector cross products.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-class DenseSubvector< SVecSVecCrossExpr<VT1,VT2>, unaligned, false >
-   : public DenseVector< DenseSubvector< SVecSVecCrossExpr<VT1,VT2>, unaligned, false >, false >
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+class DenseSubvector< SVecSVecCrossExpr<VT1_,VT2_>, unaligned, false >
+   : public DenseVector< DenseSubvector< SVecSVecCrossExpr<VT1_,VT2_>, unaligned, false >, false >
    , private Subvector
 {
  private:
    //**Type definitions****************************************************************************
-   typedef SVecSVecCrossExpr<VT1,VT2>  CPE;  //!< Type of the cross product expression.
+   typedef SVecSVecCrossExpr<VT1_,VT2_>  CPE;  //!< Type of the cross product expression.
    typedef typename CPE::ResultType    RT;   //!< Result type of the cross product expression.
    //**********************************************************************************************
 
@@ -4397,12 +4397,12 @@ struct SubvectorExprTrait< const volatile DenseSubvector<VT,AF1,TF>, AF2 >
 
 //*************************************************************************************************
 /*! \cond BLAZE_INTERNAL */
-template< typename VT1, typename VT2, bool AF >
-struct SubvectorExprTrait< DVecDVecCrossExpr<VT1,VT2>, AF >
+template< typename VT1_, typename VT2_, bool AF >
+struct SubvectorExprTrait< DVecDVecCrossExpr<VT1_,VT2_>, AF >
 {
  public:
    //**********************************************************************************************
-   typedef DenseSubvector< DVecDVecCrossExpr<VT1,VT2>, unaligned, false >  Type;
+   typedef DenseSubvector< DVecDVecCrossExpr<VT1_,VT2_>, unaligned, false >  Type;
    //**********************************************************************************************
 };
 /*! \endcond */
@@ -4411,12 +4411,12 @@ struct SubvectorExprTrait< DVecDVecCrossExpr<VT1,VT2>, AF >
 
 //*************************************************************************************************
 /*! \cond BLAZE_INTERNAL */
-template< typename VT1, typename VT2, bool AF >
-struct SubvectorExprTrait< DVecSVecCrossExpr<VT1,VT2>, AF >
+template< typename VT1_, typename VT2_, bool AF >
+struct SubvectorExprTrait< DVecSVecCrossExpr<VT1_,VT2_>, AF >
 {
  public:
    //**********************************************************************************************
-   typedef DenseSubvector< DVecSVecCrossExpr<VT1,VT2>, unaligned, false >  Type;
+   typedef DenseSubvector< DVecSVecCrossExpr<VT1_,VT2_>, unaligned, false >  Type;
    //**********************************************************************************************
 };
 /*! \endcond */
@@ -4425,12 +4425,12 @@ struct SubvectorExprTrait< DVecSVecCrossExpr<VT1,VT2>, AF >
 
 //*************************************************************************************************
 /*! \cond BLAZE_INTERNAL */
-template< typename VT1, typename VT2, bool AF >
-struct SubvectorExprTrait< SVecDVecCrossExpr<VT1,VT2>, AF >
+template< typename VT1_, typename VT2_, bool AF >
+struct SubvectorExprTrait< SVecDVecCrossExpr<VT1_,VT2_>, AF >
 {
  public:
    //**********************************************************************************************
-   typedef DenseSubvector< SVecDVecCrossExpr<VT1,VT2>, unaligned, false >  Type;
+   typedef DenseSubvector< SVecDVecCrossExpr<VT1_,VT2_>, unaligned, false >  Type;
    //**********************************************************************************************
 };
 /*! \endcond */
@@ -4439,12 +4439,12 @@ struct SubvectorExprTrait< SVecDVecCrossExpr<VT1,VT2>, AF >
 
 //*************************************************************************************************
 /*! \cond BLAZE_INTERNAL */
-template< typename VT1, typename VT2, bool AF >
-struct SubvectorExprTrait< SVecSVecCrossExpr<VT1,VT2>, AF >
+template< typename VT1_, typename VT2_, bool AF >
+struct SubvectorExprTrait< SVecSVecCrossExpr<VT1_,VT2_>, AF >
 {
  public:
    //**********************************************************************************************
-   typedef DenseSubvector< SVecSVecCrossExpr<VT1,VT2>, unaligned, false >  Type;
+   typedef DenseSubvector< SVecSVecCrossExpr<VT1_,VT2_>, unaligned, false >  Type;
    //**********************************************************************************************
 };
 /*! \endcond */

@@ -58,17 +58,17 @@ namespace blaze {
 //*************************************************************************************************
 /*!\name Dense vector SMP functions */
 //@{
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void smpAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void smpAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void smpAddAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void smpAddAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void smpSubAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void smpSubAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void smpMultAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void smpMultAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 //@}
 //*************************************************************************************************
 
@@ -87,11 +87,11 @@ inline void smpMultAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -115,11 +115,11 @@ inline void smpAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpAddAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpAddAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -143,11 +143,11 @@ inline void smpAddAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs 
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpSubAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpSubAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -171,11 +171,11 @@ inline void smpSubAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs 
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpMultAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpMultAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 

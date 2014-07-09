@@ -115,7 +115,7 @@ class TSVecTDMatMultExpr : public DenseVector< TSVecTDMatMultExpr<VT,MT>, true >
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct UseAssign {
       enum { value = useAssign };
    };
@@ -297,9 +297,9 @@ class TSVecTDMatMultExpr : public DenseVector< TSVecTDMatMultExpr<VT,MT>, true >
    // in case either the left-hand side matrix operand requires an intermediate evaluation or
    // the right-hand side vector operand is a compound expression.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( DenseVector<VT2,true>& lhs, const TSVecTDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( DenseVector<VT2_,true>& lhs, const TSVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -342,9 +342,9 @@ class TSVecTDMatMultExpr : public DenseVector< TSVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized assignment of a transpose sparse vector-
    // transpose dense matrix multiplication expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( SparseVector<VT2,true>& lhs, const TSVecTDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( SparseVector<VT2_,true>& lhs, const TSVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -372,9 +372,9 @@ class TSVecTDMatMultExpr : public DenseVector< TSVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized addition assignment of a transpose sparse
    // vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      addAssign( DenseVector<VT2,true>& lhs, const TSVecTDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      addAssign( DenseVector<VT2_,true>& lhs, const TSVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -416,9 +416,9 @@ class TSVecTDMatMultExpr : public DenseVector< TSVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized subtraction assignment of a transpose
    // sparse vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      subAssign( DenseVector<VT2,true>& lhs, const TSVecTDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      subAssign( DenseVector<VT2_,true>& lhs, const TSVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -460,9 +460,9 @@ class TSVecTDMatMultExpr : public DenseVector< TSVecTDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized multiplication assignment of a transpose
    // sparse vector-transpose dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      multAssign( DenseVector<VT2,true>& lhs, const TSVecTDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      multAssign( DenseVector<VT2_,true>& lhs, const TSVecTDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 

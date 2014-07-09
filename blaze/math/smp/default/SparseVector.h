@@ -58,17 +58,17 @@ namespace blaze {
 //*************************************************************************************************
 /*!\name Sparse vector SMP functions */
 //@{
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void smpAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void smpAssign( SparseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void smpAddAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void smpAddAssign( SparseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void smpSubAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void smpSubAssign( SparseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 
-template< typename VT1, bool TF1, typename VT2, bool TF2 >
-inline void smpMultAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs );
+template< typename VT1_, bool TF1, typename VT2_, bool TF2 >
+inline void smpMultAssign( SparseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs );
 //@}
 //*************************************************************************************************
 
@@ -87,11 +87,11 @@ inline void smpMultAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rh
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side sparse vector
+template< typename VT1_  // Type of the left-hand side sparse vector
         , bool TF1      // Transpose flag of the left-hand side sparse vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpAssign( SparseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -115,11 +115,11 @@ inline void smpAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side sparse vector
+template< typename VT1_  // Type of the left-hand side sparse vector
         , bool TF1      // Transpose flag of the left-hand side sparse vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpAddAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpAddAssign( SparseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -144,11 +144,11 @@ inline void smpAddAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side sparse vector
+template< typename VT1_  // Type of the left-hand side sparse vector
         , bool TF1      // Transpose flag of the left-hand side sparse vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpSubAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpSubAssign( SparseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -173,11 +173,11 @@ inline void smpSubAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side sparse vector
+template< typename VT1_  // Type of the left-hand side sparse vector
         , bool TF1      // Transpose flag of the left-hand side sparse vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpMultAssign( SparseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpMultAssign( SparseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 

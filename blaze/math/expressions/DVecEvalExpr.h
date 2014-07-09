@@ -213,8 +213,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized assignment of a dense vector evaluation
    // expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void assign( DenseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void assign( DenseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -237,8 +237,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized assignment of a dense vector evaluation
    // expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void assign( SparseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void assign( SparseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -261,8 +261,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized addition assignment of a dense vector
    // evaluation expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void addAssign( DenseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void addAssign( DenseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -285,8 +285,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized addition assignment of a dense vector
    // evaluation expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void addAssign( SparseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void addAssign( SparseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -309,8 +309,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized subtraction assignment of a dense
    // vector evaluation expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void subAssign( DenseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void subAssign( DenseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -333,8 +333,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized subtraction assignment of a dense
    // vector evaluation expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void subAssign( SparseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void subAssign( SparseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -357,8 +357,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized multiplication assignment of a dense
    // vector evaluation expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void multAssign( DenseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void multAssign( DenseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -381,8 +381,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized multiplication assignment of a dense
    // vector evaluation expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void multAssign( SparseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void multAssign( SparseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -405,8 +405,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized SMP assignment of a dense vector
    // evaluation expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void smpAssign( DenseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void smpAssign( DenseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -429,8 +429,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized SMP assignment of a dense vector
    // evaluation expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void smpAssign( SparseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void smpAssign( SparseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -453,8 +453,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized SMP addition assignment of a dense
    // vector evaluation expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void smpAddAssign( DenseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void smpAddAssign( DenseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -477,8 +477,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized SMP addition assignment of a dense
    // vector evaluation expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void smpAddAssign( SparseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void smpAddAssign( SparseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -501,8 +501,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized SMP subtraction assignment of a dense
    // vector evaluation expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void smpSubAssign( DenseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void smpSubAssign( DenseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -525,8 +525,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized SMP subtraction assignment of a dense
    // vector evaluation expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void smpSubAssign( SparseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void smpSubAssign( SparseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -549,8 +549,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized SMP multiplication assignment of a dense
    // vector evaluation expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void smpMultAssign( DenseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void smpMultAssign( DenseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -573,8 +573,8 @@ class DVecEvalExpr : public DenseVector< DVecEvalExpr<VT,TF>, TF >
    // This function implements the performance optimized SMP multiplication assignment of a dense
    // vector evaluation expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void smpMultAssign( SparseVector<VT2,TF>& lhs, const DVecEvalExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void smpMultAssign( SparseVector<VT2_,TF>& lhs, const DVecEvalExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 

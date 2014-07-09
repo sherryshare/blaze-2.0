@@ -101,7 +101,7 @@ class SVecTransExpr : public SparseVector< SVecTransExpr<VT,TF>, TF >
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct UseAssign {
       enum { value = useAssign };
    };
@@ -376,15 +376,15 @@ class SVecTransExpr : public SparseVector< SVecTransExpr<VT,TF>, TF >
    // the SFINAE principle, this operator can only be selected by the compiler in case
    // the operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( DenseVector<VT2,TF>& lhs, const SVecTransExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( DenseVector<VT2_,TF>& lhs, const SVecTransExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
       BLAZE_INTERNAL_ASSERT( (~lhs).size() == rhs.size(), "Invalid vector sizes" );
 
-      DVecTransposer<VT2,!TF> tmp( ~lhs );
+      DVecTransposer<VT2_,!TF> tmp( ~lhs );
       assign( tmp, rhs.sv_ );
    }
    /*! \endcond */
@@ -404,15 +404,15 @@ class SVecTransExpr : public SparseVector< SVecTransExpr<VT,TF>, TF >
    // the SFINAE principle, this operator can only be selected by the compiler in case
    // the operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( SparseVector<VT2,TF>& lhs, const SVecTransExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( SparseVector<VT2_,TF>& lhs, const SVecTransExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
       BLAZE_INTERNAL_ASSERT( (~lhs).size() == rhs.size(), "Invalid vector sizes" );
 
-      SVecTransposer<VT2,!TF> tmp( ~lhs );
+      SVecTransposer<VT2_,!TF> tmp( ~lhs );
       assign( tmp, rhs.sv_ );
    }
    /*! \endcond */
@@ -432,15 +432,15 @@ class SVecTransExpr : public SparseVector< SVecTransExpr<VT,TF>, TF >
    // of the SFINAE principle, this operator can only be selected by the compiler in case
    // the operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      addAssign( DenseVector<VT2,TF>& lhs, const SVecTransExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      addAssign( DenseVector<VT2_,TF>& lhs, const SVecTransExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
       BLAZE_INTERNAL_ASSERT( (~lhs).size() == rhs.size(), "Invalid vector sizes" );
 
-      DVecTransposer<VT2,!TF> tmp( ~lhs );
+      DVecTransposer<VT2_,!TF> tmp( ~lhs );
       addAssign( tmp, rhs.sv_ );
    }
    /*! \endcond */
@@ -464,15 +464,15 @@ class SVecTransExpr : public SparseVector< SVecTransExpr<VT,TF>, TF >
    // the SFINAE principle, this operator can only be selected by the compiler in case the
    // operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      subAssign( DenseVector<VT2,TF>& lhs, const SVecTransExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      subAssign( DenseVector<VT2_,TF>& lhs, const SVecTransExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
       BLAZE_INTERNAL_ASSERT( (~lhs).size() == rhs.size(), "Invalid vector sizes" );
 
-      DVecTransposer<VT2,!TF> tmp( ~lhs );
+      DVecTransposer<VT2_,!TF> tmp( ~lhs );
       subAssign( tmp, rhs.sv_ );
    }
    /*! \endcond */
@@ -496,15 +496,15 @@ class SVecTransExpr : public SparseVector< SVecTransExpr<VT,TF>, TF >
    // SFINAE principle, this operator can only be selected by the compiler in case the operand
    // requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      multAssign( DenseVector<VT2,TF>& lhs, const SVecTransExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      multAssign( DenseVector<VT2_,TF>& lhs, const SVecTransExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
       BLAZE_INTERNAL_ASSERT( (~lhs).size() == rhs.size(), "Invalid vector sizes" );
 
-      DVecTransposer<VT2,!TF> tmp( ~lhs );
+      DVecTransposer<VT2_,!TF> tmp( ~lhs );
       multAssign( tmp, rhs.sv_ );
    }
    /*! \endcond */
@@ -532,9 +532,9 @@ class SVecTransExpr : public SparseVector< SVecTransExpr<VT,TF>, TF >
       b = trans( trans( a ) );
       \endcode
    */
-   template< typename VT2  // Type of the sparse vector
+   template< typename VT2_  // Type of the sparse vector
            , bool TF2 >    // Transpose flag of the sparse vector
-   friend inline Operand trans( const SVecTransExpr<VT2,TF2>& sv )
+   friend inline Operand trans( const SVecTransExpr<VT2_,TF2>& sv )
    {
       BLAZE_FUNCTION_TRACE;
 

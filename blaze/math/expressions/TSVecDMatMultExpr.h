@@ -351,8 +351,8 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized assignment of a transpose sparse vector-
    // dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void assign( DenseVector<VT2,true>& lhs, const TSVecDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void assign( DenseVector<VT2_,true>& lhs, const TSVecDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -394,11 +394,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the default assignment kernel for the transpose sparse vector-
    // dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1> >::Type
-      selectAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
 
@@ -438,11 +438,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the optimized assignment kernel for the transpose sparse vector-
    // dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseOptimizedKernel<VT1,VT2,MT1> >::Type
-      selectAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseOptimizedKernel<VT1_,VT2_,MT1> >::Type
+      selectAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
 
@@ -532,11 +532,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the vectorized assignment kernel for the transpose sparse vector-
    // dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseVectorizedKernel<VT1,VT2,MT1> >::Type
-      selectAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseVectorizedKernel<VT1_,VT2_,MT1> >::Type
+      selectAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef IntrinsicTrait<ElementType>  IT;
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
@@ -627,11 +627,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the SMP assignment kernel for the transpose sparse vector-dense
    // matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       smpAssign( y, x * A );
    }
@@ -651,8 +651,8 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized assignment of a transpose sparse vector-
    // dense matrix multiplication expression to a sparse vector.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline void assign( SparseVector<VT2,true>& lhs, const TSVecDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline void assign( SparseVector<VT2_,true>& lhs, const TSVecDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -680,8 +680,8 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized addition assignment of a transpose sparse
    // vector-dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void addAssign( DenseVector<VT2,true>& lhs, const TSVecDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void addAssign( DenseVector<VT2_,true>& lhs, const TSVecDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -719,11 +719,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the default addition assignment kernel for the transpose sparse
    // vector-dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1> >::Type
-      selectAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
 
@@ -757,11 +757,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the optimized addition assignment kernel for the transpose sparse
    // vector-dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseOptimizedKernel<VT1,VT2,MT1> >::Type
-      selectAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseOptimizedKernel<VT1_,VT2_,MT1> >::Type
+      selectAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
 
@@ -821,11 +821,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the vectorized addition assignment kernel for the transpose sparse
    // vector-dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseVectorizedKernel<VT1,VT2,MT1> >::Type
-      selectAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseVectorizedKernel<VT1_,VT2_,MT1> >::Type
+      selectAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef IntrinsicTrait<ElementType>  IT;
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
@@ -886,11 +886,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the SMP addition assignment kernel for the transpose sparse vector-
    // dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectAddAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectAddAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       smpAddAssign( y, x * A );
    }
@@ -913,8 +913,8 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized subtraction assignment of a transpose
    // sparse vector-dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void subAssign( DenseVector<VT2,true>& lhs, const TSVecDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void subAssign( DenseVector<VT2_,true>& lhs, const TSVecDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -954,11 +954,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the default subtraction assignment kernel for the transpose
    // sparse vector-dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseDefaultKernel<VT1,VT2,MT1> >::Type
-      selectSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseDefaultKernel<VT1_,VT2_,MT1> >::Type
+      selectSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
 
@@ -992,11 +992,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the optimized subtraction assignment kernel for the transpose
    // sparse vector-dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseOptimizedKernel<VT1,VT2,MT1> >::Type
-      selectSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseOptimizedKernel<VT1_,VT2_,MT1> >::Type
+      selectSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
 
@@ -1056,11 +1056,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the vectorized subtraction assignment kernel for the transpose
    // sparse vector-dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseVectorizedKernel<VT1,VT2,MT1> >::Type
-      selectSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseVectorizedKernel<VT1_,VT2_,MT1> >::Type
+      selectSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       typedef IntrinsicTrait<ElementType>  IT;
       typedef typename RemoveReference<LT>::Type::ConstIterator  ConstIterator;
@@ -1121,11 +1121,11 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the SMP subtraction assignment kernel for the transpose sparse
    // vector-dense matrix multiplication.
    */
-   template< typename VT1    // Type of the left-hand side target vector
-           , typename VT2    // Type of the left-hand side vector operand
+   template< typename VT1_    // Type of the left-hand side target vector
+           , typename VT2_    // Type of the left-hand side vector operand
            , typename MT1 >  // Type of the right-hand side matrix operand
-   static inline typename EnableIf< UseSMPAssignKernel<VT1,VT2,MT1> >::Type
-      selectSubAssignKernel( VT1& y, const VT2& x, const MT1& A )
+   static inline typename EnableIf< UseSMPAssignKernel<VT1_,VT2_,MT1> >::Type
+      selectSubAssignKernel( VT1_& y, const VT2_& x, const MT1& A )
    {
       smpSubAssign( y, x * A );
    }
@@ -1148,8 +1148,8 @@ class TSVecDMatMultExpr : public DenseVector< TSVecDMatMultExpr<VT,MT>, true >
    // This function implements the performance optimized multiplication assignment of a transpose
    // sparse vector-dense matrix multiplication expression to a dense vector.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline void multAssign( DenseVector<VT2,true>& lhs, const TSVecDMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline void multAssign( DenseVector<VT2_,true>& lhs, const TSVecDMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 

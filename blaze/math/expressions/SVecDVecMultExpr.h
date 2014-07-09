@@ -79,23 +79,23 @@ namespace blaze {
 // The SVecDVecMultExpr class represents the compile time expression for componentwise
 // multiplications between a sparse vector and a dense vector.
 */
-template< typename VT1  // Type of the left-hand side sparse vector
-        , typename VT2  // Type of the right-hand side dense vector
+template< typename VT1_  // Type of the left-hand side sparse vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF >     // Transpose flag
-class SVecDVecMultExpr : public SparseVector< SVecDVecMultExpr<VT1,VT2,TF>, TF >
+class SVecDVecMultExpr : public SparseVector< SVecDVecMultExpr<VT1_,VT2_,TF>, TF >
                        , private VecVecMultExpr
                        , private Computation
 {
  private:
    //**Type definitions****************************************************************************
-   typedef typename VT1::ResultType     RT1;  //!< Result type of the left-hand side sparse vector expression.
-   typedef typename VT2::ResultType     RT2;  //!< Result type of the right-hand side dense vector expression.
-   typedef typename VT1::ReturnType     RN1;  //!< Return type of the left-hand side sparse vector expression.
-   typedef typename VT2::ReturnType     RN2;  //!< Return type of the right-hand side dense vector expression.
-   typedef typename VT1::CompositeType  CT1;  //!< Composite type of the left-hand side sparse vector expression.
-   typedef typename VT2::CompositeType  CT2;  //!< Composite type of the right-hand side dense vector expression.
-   typedef typename VT1::TransposeType  TT1;  //!< Transpose type of the left-hand side sparse vector expression.
-   typedef typename VT2::TransposeType  TT2;  //!< Transpose type of the right-hand side dense vector expression.
+   typedef typename VT1_::ResultType     RT1;  //!< Result type of the left-hand side sparse vector expression.
+   typedef typename VT2_::ResultType     RT2;  //!< Result type of the right-hand side dense vector expression.
+   typedef typename VT1_::ReturnType     RN1;  //!< Return type of the left-hand side sparse vector expression.
+   typedef typename VT2_::ReturnType     RN2;  //!< Return type of the right-hand side dense vector expression.
+   typedef typename VT1_::CompositeType  CT1;  //!< Composite type of the left-hand side sparse vector expression.
+   typedef typename VT2_::CompositeType  CT2;  //!< Composite type of the right-hand side dense vector expression.
+   typedef typename VT1_::TransposeType  TT1;  //!< Transpose type of the left-hand side sparse vector expression.
+   typedef typename VT2_::TransposeType  TT2;  //!< Transpose type of the right-hand side dense vector expression.
    //**********************************************************************************************
 
    //**Return type evaluation**********************************************************************
@@ -119,7 +119,7 @@ class SVecDVecMultExpr : public SparseVector< SVecDVecMultExpr<VT1,VT2,TF>, TF >
        to \a true and the multiplication expression will be evaluated via the \a assign function
        family. Otherwise \a useAssign will be set to \a false and the expression will be
        evaluated via the subscript operator. */
-   enum { useAssign = ( RequiresEvaluation<VT1>::value || RequiresEvaluation<VT2>::value ) };
+   enum { useAssign = ( RequiresEvaluation<VT1_>::value || RequiresEvaluation<VT2_>::value ) };
 
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
@@ -132,7 +132,7 @@ class SVecDVecMultExpr : public SparseVector< SVecDVecMultExpr<VT1,VT2,TF>, TF >
 
  public:
    //**Type definitions****************************************************************************
-   typedef SVecDVecMultExpr<VT1,VT2,TF>        This;           //!< Type of this SVecDVecMultExpr instance.
+   typedef SVecDVecMultExpr<VT1_,VT2_,TF>        This;           //!< Type of this SVecDVecMultExpr instance.
    typedef typename MultTrait<RT1,RT2>::Type   ResultType;     //!< Result type for expression template evaluations.
    typedef typename ResultType::TransposeType  TransposeType;  //!< Transpose type for expression template evaluations.
    typedef typename ResultType::ElementType    ElementType;    //!< Resulting element type.
@@ -144,10 +144,10 @@ class SVecDVecMultExpr : public SparseVector< SVecDVecMultExpr<VT1,VT2,TF>, TF >
    typedef typename SelectType< useAssign, const ResultType, const SVecDVecMultExpr& >::Type  CompositeType;
 
    //! Composite type of the left-hand side sparse vector expression.
-   typedef typename SelectType< IsExpression<VT1>::value, const VT1, const VT1& >::Type  LeftOperand;
+   typedef typename SelectType< IsExpression<VT1_>::value, const VT1_, const VT1_& >::Type  LeftOperand;
 
    //! Composite type of the right-hand side dense vector expression.
-   typedef typename SelectType< IsExpression<VT2>::value, const VT2, const VT2& >::Type  RightOperand;
+   typedef typename SelectType< IsExpression<VT2_>::value, const VT2_, const VT2_& >::Type  RightOperand;
    //**********************************************************************************************
 
    //**Compilation flags***************************************************************************
@@ -289,7 +289,7 @@ class SVecDVecMultExpr : public SparseVector< SVecDVecMultExpr<VT1,VT2,TF>, TF >
    // \param lhs The left-hand side sparse vector operand of the multiplication expression.
    // \param rhs The right-hand side dense vector operand of the multiplication expression.
    */
-   explicit inline SVecDVecMultExpr( const VT1& lhs, const VT2& rhs )
+   explicit inline SVecDVecMultExpr( const VT1_& lhs, const VT2_& rhs )
       : lhs_( lhs )  // Left-hand side sparse vector of the multiplication expression
       , rhs_( rhs )  // Right-hand side dense vector of the multiplication expression
    {
@@ -610,10 +610,10 @@ class SVecDVecMultExpr : public SparseVector< SVecDVecMultExpr<VT1,VT2,TF>, TF >
 
    //**Compile time checks*************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT1 );
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT2 );
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT1, TF );
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT1_ );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT2_ );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT1_, TF );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
    /*! \endcond */
    //**********************************************************************************************
 };
@@ -681,13 +681,13 @@ inline const SVecDVecMultExpr<T1,T2,TF>
 
 //*************************************************************************************************
 /*! \cond BLAZE_INTERNAL */
-template< typename VT1, typename VT2, bool TF, bool AF >
-struct SubvectorExprTrait< SVecDVecMultExpr<VT1,VT2,TF>, AF >
+template< typename VT1_, typename VT2_, bool TF, bool AF >
+struct SubvectorExprTrait< SVecDVecMultExpr<VT1_,VT2_,TF>, AF >
 {
  public:
    //**********************************************************************************************
-   typedef typename MultExprTrait< typename SubvectorExprTrait<const VT1,AF>::Type
-                                 , typename SubvectorExprTrait<const VT2,AF>::Type >::Type  Type;
+   typedef typename MultExprTrait< typename SubvectorExprTrait<const VT1_,AF>::Type
+                                 , typename SubvectorExprTrait<const VT2_,AF>::Type >::Type  Type;
    //**********************************************************************************************
 };
 /*! \endcond */

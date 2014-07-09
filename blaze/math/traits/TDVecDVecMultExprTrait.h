@@ -66,8 +66,8 @@ namespace blaze {
 /*!\brief Auxiliary helper struct for the TDVecDVecMultExprTrait.
 // \ingroup math_traits
 */
-template< typename VT1
-        , typename VT2
+template< typename VT1_
+        , typename VT2_
         , bool Valid >
 struct TDVecDVecMultExprTraitHelper
 {
@@ -84,12 +84,12 @@ struct TDVecDVecMultExprTraitHelper
 /*!\brief Specialization of the TDVecDVecMultExprTrait auxiliary helper struct.
 // \ingroup math_traits
 */
-template< typename VT1
-        , typename VT2 >
-struct TDVecDVecMultExprTraitHelper<VT1,VT2,true>
+template< typename VT1_
+        , typename VT2_ >
+struct TDVecDVecMultExprTraitHelper<VT1_,VT2_,true>
 {
    //**********************************************************************************************
-   typedef typename MultTrait<typename VT1::ElementType,typename VT2::ElementType>::Type  Type;
+   typedef typename MultTrait<typename VT1_::ElementType,typename VT2_::ElementType>::Type  Type;
    //**********************************************************************************************
 };
 /*! \endcond */
@@ -102,32 +102,32 @@ struct TDVecDVecMultExprTraitHelper<VT1,VT2,true>
 //
 // Via this type trait it is possible to evaluate the resulting expression type of a transpose
 // dense vector/dense vector multiplication (inner product). Given the transpose dense vector
-// type \a VT1 and the non-transpose dense vector type \a VT2, the nested type \a Type corresponds
-// to the resulting expression type. In case either \a VT1 is not a transpose dense vector
-// type or \a VT2 is not a non-transpose dense vector type, the resulting \a Type is set to
+// type \a VT1_ and the non-transpose dense vector type \a VT2_, the nested type \a Type corresponds
+// to the resulting expression type. In case either \a VT1_ is not a transpose dense vector
+// type or \a VT2_ is not a non-transpose dense vector type, the resulting \a Type is set to
 // \a INVALID_TYPE.
 */
-template< typename VT1    // Type of the left-hand side transpose dense vector
-        , typename VT2 >  // Type of the right-hand side non-transpose dense vector
+template< typename VT1_    // Type of the left-hand side transpose dense vector
+        , typename VT2_ >  // Type of the right-hand side non-transpose dense vector
 struct TDVecDVecMultExprTrait
 {
  private:
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   enum { qualified = IsConst<VT1>::value || IsVolatile<VT1>::value || IsReference<VT1>::value ||
-                      IsConst<VT2>::value || IsVolatile<VT2>::value || IsReference<VT2>::value };
+   enum { qualified = IsConst<VT1_>::value || IsVolatile<VT1_>::value || IsReference<VT1_>::value ||
+                      IsConst<VT2_>::value || IsVolatile<VT2_>::value || IsReference<VT2_>::value };
 
-   enum { valid = IsDenseVector<VT1>::value && IsRowVector<VT1>::value &&
-                  IsDenseVector<VT2>::value && IsColumnVector<VT2>::value };
+   enum { valid = IsDenseVector<VT1_>::value && IsRowVector<VT1_>::value &&
+                  IsDenseVector<VT2_>::value && IsColumnVector<VT2_>::value };
    /*! \endcond */
    //**********************************************************************************************
 
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   typedef TDVecDVecMultExprTraitHelper<VT1,VT2,valid>  Tmp;
+   typedef TDVecDVecMultExprTraitHelper<VT1_,VT2_,valid>  Tmp;
 
-   typedef typename RemoveReference< typename RemoveCV<VT1>::Type >::Type  Type1;
-   typedef typename RemoveReference< typename RemoveCV<VT2>::Type >::Type  Type2;
+   typedef typename RemoveReference< typename RemoveCV<VT1_>::Type >::Type  Type1;
+   typedef typename RemoveReference< typename RemoveCV<VT2_>::Type >::Type  Type2;
    /*! \endcond */
    //**********************************************************************************************
 

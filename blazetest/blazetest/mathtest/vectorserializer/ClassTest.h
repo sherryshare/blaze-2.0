@@ -114,8 +114,8 @@ class ClassTest
    template< size_t N, typename VT >
    void runSparseSubvectorTests( const VT& src );
 
-   template< typename VT1, typename VT2 >
-   void runTest( const VT1& src, VT2& dst );
+   template< typename VT1_, typename VT2_ >
+   void runTest( const VT1_& src, VT2_& dst );
 
    template< typename Archive, typename VT >
    void testSerialization( Archive& archive, const VT& src );
@@ -123,8 +123,8 @@ class ClassTest
    template< typename Archive, typename VT >
    void testDeserialization( Archive& archive, VT& dst );
 
-   template< typename VT1, typename VT2 >
-   void compareVectors( const VT1& src, const VT2& dst );
+   template< typename VT1_, typename VT2_ >
+   void compareVectors( const VT1_& src, const VT2_& dst );
    //@}
    //**********************************************************************************************
 
@@ -354,12 +354,12 @@ void ClassTest::runSparseSubvectorTests( const VT& src )
 // source vector is serialized and the destination vector is reconstituted from the resulting
 // archive. In case an error is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the source vector
-        , typename VT2 >  // Type of the destination vector
-void ClassTest::runTest( const VT1& src, VT2& dst )
+template< typename VT1_    // Type of the source vector
+        , typename VT2_ >  // Type of the destination vector
+void ClassTest::runTest( const VT1_& src, VT2_& dst )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_TYPE( VT1 );
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_TYPE( VT2 );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_TYPE( VT1_ );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_TYPE( VT2_ );
 
    blaze::Archive<std::stringstream> archive;
 
@@ -456,12 +456,12 @@ void ClassTest::testDeserialization( Archive& archive, VT& dst )
 // This function performs a comparison between the given source and destination vector. In
 // case the vector are not equal, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the source vector
-        , typename VT2 >  // Type of the destination vector
-void ClassTest::compareVectors( const VT1& src, const VT2& dst )
+template< typename VT1_    // Type of the source vector
+        , typename VT2_ >  // Type of the destination vector
+void ClassTest::compareVectors( const VT1_& src, const VT2_& dst )
 {
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_TYPE( VT1 );
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_TYPE( VT2 );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_TYPE( VT1_ );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_TYPE( VT2_ );
 
    using blaze::IsDenseVector;
 
@@ -470,10 +470,10 @@ void ClassTest::compareVectors( const VT1& src, const VT2& dst )
       oss << " Test: " << test_ << "\n"
           << " Error: Vector comparison failed\n"
           << " Details:\n"
-          << "   " << ( IsDenseVector<VT1>::value ? ( "Dense" ) : ( "Sparse" ) ) << " source vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
-          << "   " << ( IsDenseVector<VT2>::value ? ( "Dense" ) : ( "Sparse" ) ) << " destination vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "   " << ( IsDenseVector<VT1_>::value ? ( "Dense" ) : ( "Sparse" ) ) << " source vector type:\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
+          << "   " << ( IsDenseVector<VT2_>::value ? ( "Dense" ) : ( "Sparse" ) ) << " destination vector type:\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Source:\n" << src << "\n"
           << "   Destination:\n" << dst << "\n";
       throw std::runtime_error( oss.str() );

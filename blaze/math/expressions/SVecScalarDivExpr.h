@@ -132,7 +132,7 @@ class SVecScalarDivExpr : public SparseVector< SVecScalarDivExpr<VT,ST,TF>, TF >
 
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct UseAssign {
       enum { value = useAssign };
    };
@@ -420,9 +420,9 @@ class SVecScalarDivExpr : public SparseVector< SVecScalarDivExpr<VT,ST,TF>, TF >
    // principle, this operator can only be selected by the compiler in case the vector
    // operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( DenseVector<VT2,TF>& lhs, const SVecScalarDivExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( DenseVector<VT2_,TF>& lhs, const SVecScalarDivExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -448,9 +448,9 @@ class SVecScalarDivExpr : public SparseVector< SVecScalarDivExpr<VT,ST,TF>, TF >
    // principle, this operator can only be selected by the compiler in case the vector
    // operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( SparseVector<VT2,TF>& lhs, const SVecScalarDivExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( SparseVector<VT2_,TF>& lhs, const SVecScalarDivExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -476,9 +476,9 @@ class SVecScalarDivExpr : public SparseVector< SVecScalarDivExpr<VT,ST,TF>, TF >
    // SFINAE principle, this operator can only be selected by the compiler in case the vector
    // operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      addAssign( DenseVector<VT2,TF>& lhs, const SVecScalarDivExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      addAssign( DenseVector<VT2_,TF>& lhs, const SVecScalarDivExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -512,9 +512,9 @@ class SVecScalarDivExpr : public SparseVector< SVecScalarDivExpr<VT,ST,TF>, TF >
    // principle, this operator can only be selected by the compiler in case the vector operand
    // requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      subAssign( DenseVector<VT2,TF>& lhs, const SVecScalarDivExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      subAssign( DenseVector<VT2_,TF>& lhs, const SVecScalarDivExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -548,9 +548,9 @@ class SVecScalarDivExpr : public SparseVector< SVecScalarDivExpr<VT,ST,TF>, TF >
    // of the SFINAE principle, this operator can only be selected by the compiler in case the
    // vector operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      multAssign( DenseVector<VT2,TF>& lhs, const SVecScalarDivExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      multAssign( DenseVector<VT2_,TF>& lhs, const SVecScalarDivExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 

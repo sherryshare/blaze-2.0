@@ -76,22 +76,22 @@ namespace blaze {
 // The SVecSVecCrossExpr class represents the compile time expression for cross products
 // between sparse vectors.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side sparse vector
-class SVecSVecCrossExpr : public DenseVector< SVecSVecCrossExpr<VT1,VT2>, false >
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side sparse vector
+class SVecSVecCrossExpr : public DenseVector< SVecSVecCrossExpr<VT1_,VT2_>, false >
                         , private CrossExpr
                         , private Computation
 {
  private:
    //**Type definitions****************************************************************************
-   typedef typename VT1::ResultType     RT1;  //!< Result type of the left-hand side sparse vector expression.
-   typedef typename VT2::ResultType     RT2;  //!< Result type of the right-hand side sparse vector expression.
-   typedef typename VT1::ReturnType     RN1;  //!< Return type of the left-hand side sparse vector expression.
-   typedef typename VT2::ReturnType     RN2;  //!< Return type of the right-hand side sparse vector expression.
-   typedef typename VT1::CompositeType  CT1;  //!< Composite type of the left-hand side sparse vector expression.
-   typedef typename VT2::CompositeType  CT2;  //!< Composite type of the right-hand side sparse vector expression.
-   typedef typename VT1::ElementType    ET1;  //!< Element type of the left-hand side sparse vector expression.
-   typedef typename VT2::ElementType    ET2;  //!< Element type of the right-hand side sparse vector expression.
+   typedef typename VT1_::ResultType     RT1;  //!< Result type of the left-hand side sparse vector expression.
+   typedef typename VT2_::ResultType     RT2;  //!< Result type of the right-hand side sparse vector expression.
+   typedef typename VT1_::ReturnType     RN1;  //!< Return type of the left-hand side sparse vector expression.
+   typedef typename VT2_::ReturnType     RN2;  //!< Return type of the right-hand side sparse vector expression.
+   typedef typename VT1_::CompositeType  CT1;  //!< Composite type of the left-hand side sparse vector expression.
+   typedef typename VT2_::CompositeType  CT2;  //!< Composite type of the right-hand side sparse vector expression.
+   typedef typename VT1_::ElementType    ET1;  //!< Element type of the left-hand side sparse vector expression.
+   typedef typename VT2_::ElementType    ET2;  //!< Element type of the right-hand side sparse vector expression.
    //**********************************************************************************************
 
    //**Return type evaluation**********************************************************************
@@ -110,7 +110,7 @@ class SVecSVecCrossExpr : public DenseVector< SVecSVecCrossExpr<VT1,VT2>, false 
 
  public:
    //**Type definitions****************************************************************************
-   typedef SVecSVecCrossExpr<VT1,VT2>          This;           //!< Type of this SVecSVecCrossExpr instance.
+   typedef SVecSVecCrossExpr<VT1_,VT2_>          This;           //!< Type of this SVecSVecCrossExpr instance.
    typedef typename CrossTrait<RT1,RT2>::Type  ResultType;     //!< Result type for expression template evaluations.
    typedef typename ResultType::TransposeType  TransposeType;  //!< Transpose type for expression template evaluations.
    typedef typename ResultType::ElementType    ElementType;    //!< Resulting element type.
@@ -122,10 +122,10 @@ class SVecSVecCrossExpr : public DenseVector< SVecSVecCrossExpr<VT1,VT2>, false 
    typedef const ResultType  CompositeType;
 
    //! Composite type of the left-hand side sparse vector expression.
-   typedef typename SelectType< IsExpression<VT1>::value, const VT1, const VT1& >::Type  LeftOperand;
+   typedef typename SelectType< IsExpression<VT1_>::value, const VT1_, const VT1_& >::Type  LeftOperand;
 
    //! Composite type of the right-hand side sparse vector expression.
-   typedef typename SelectType< IsExpression<VT2>::value, const VT2, const VT2& >::Type  RightOperand;
+   typedef typename SelectType< IsExpression<VT2_>::value, const VT2_, const VT2_& >::Type  RightOperand;
 
    //! Composite type of the left-hand side sparse vector expression.
    typedef const StaticVector<ET1,3UL,false>  LT;
@@ -148,7 +148,7 @@ class SVecSVecCrossExpr : public DenseVector< SVecSVecCrossExpr<VT1,VT2>, false 
    // \param lhs The left-hand side operand of the cross product expression.
    // \param rhs The right-hand side operand of the cross product expression.
    */
-   explicit inline SVecSVecCrossExpr( const VT1& lhs, const VT2& rhs )
+   explicit inline SVecSVecCrossExpr( const VT1_& lhs, const VT2_& rhs )
       : lhs_( lhs )  // Left-hand side sparse vector of the cross product expression
       , rhs_( rhs )  // Right-hand side sparse vector of the cross product expression
    {
@@ -399,10 +399,10 @@ class SVecSVecCrossExpr : public DenseVector< SVecSVecCrossExpr<VT1,VT2>, false 
 
    //**Compile time checks*************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT1 );
-   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT2 );
-   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT1 );
-   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT2 );
+   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT1_ );
+   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT2_ );
+   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT1_ );
+   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT2_ );
    /*! \endcond */
    //**********************************************************************************************
 };

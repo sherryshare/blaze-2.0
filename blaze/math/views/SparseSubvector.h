@@ -753,11 +753,11 @@ class SparseSubvector : public SparseVector< SparseSubvector<VT,AF,TF>, TF >
    /*!\name Assignment operators */
    //@{
                             inline SparseSubvector& operator= ( const SparseSubvector& rhs );
-   template< typename VT2 > inline SparseSubvector& operator= ( const DenseVector<VT2,TF>&  rhs );
-   template< typename VT2 > inline SparseSubvector& operator= ( const SparseVector<VT2,TF>& rhs );
-   template< typename VT2 > inline SparseSubvector& operator+=( const Vector<VT2,TF>& rhs );
-   template< typename VT2 > inline SparseSubvector& operator-=( const Vector<VT2,TF>& rhs );
-   template< typename VT2 > inline SparseSubvector& operator*=( const Vector<VT2,TF>& rhs );
+   template< typename VT2_ > inline SparseSubvector& operator= ( const DenseVector<VT2_,TF>&  rhs );
+   template< typename VT2_ > inline SparseSubvector& operator= ( const SparseVector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline SparseSubvector& operator+=( const Vector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline SparseSubvector& operator-=( const Vector<VT2_,TF>& rhs );
+   template< typename VT2_ > inline SparseSubvector& operator*=( const Vector<VT2_,TF>& rhs );
 
    template< typename Other >
    inline typename EnableIf< IsNumeric<Other>, SparseSubvector >::Type&
@@ -809,12 +809,12 @@ class SparseSubvector : public SparseVector< SparseSubvector<VT,AF,TF>, TF >
    //@{
    template< typename Other > inline bool canAlias ( const Other* alias ) const;
    template< typename Other > inline bool isAliased( const Other* alias ) const;
-   template< typename VT2 >   inline void assign   ( const DenseVector <VT2,TF>& rhs );
-   template< typename VT2 >   inline void assign   ( const SparseVector<VT2,TF>& rhs );
-   template< typename VT2 >   inline void addAssign( const DenseVector <VT2,TF>& rhs );
-   template< typename VT2 >   inline void addAssign( const SparseVector<VT2,TF>& rhs );
-   template< typename VT2 >   inline void subAssign( const DenseVector <VT2,TF>& rhs );
-   template< typename VT2 >   inline void subAssign( const SparseVector<VT2,TF>& rhs );
+   template< typename VT2_ >   inline void assign   ( const DenseVector <VT2_,TF>& rhs );
+   template< typename VT2_ >   inline void assign   ( const SparseVector<VT2_,TF>& rhs );
+   template< typename VT2_ >   inline void addAssign( const DenseVector <VT2_,TF>& rhs );
+   template< typename VT2_ >   inline void addAssign( const SparseVector<VT2_,TF>& rhs );
+   template< typename VT2_ >   inline void subAssign( const DenseVector <VT2_,TF>& rhs );
+   template< typename VT2_ >   inline void subAssign( const SparseVector<VT2_,TF>& rhs );
    //@}
    //**********************************************************************************************
 
@@ -830,9 +830,9 @@ class SparseSubvector : public SparseVector< SparseSubvector<VT,AF,TF>, TF >
 
    //**Friend declarations*************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   template< bool AF1, typename VT2, bool AF2, bool TF2 >
-   friend const SparseSubvector<VT2,AF1,TF2>
-      subvector( const SparseSubvector<VT2,AF2,TF2>& sv, size_t index, size_t size );
+   template< bool AF1, typename VT2_, bool AF2, bool TF2 >
+   friend const SparseSubvector<VT2_,AF1,TF2>
+      subvector( const SparseSubvector<VT2_,AF2,TF2>& sv, size_t index, size_t size );
    /*! \endcond */
    //**********************************************************************************************
 
@@ -1110,21 +1110,21 @@ inline SparseSubvector<VT,AF,TF>&
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
+template< typename VT2_ >  // Type of the right-hand side dense vector
 inline SparseSubvector<VT,AF,TF>&
-   SparseSubvector<VT,AF,TF>::operator=( const DenseVector<VT2,TF>& rhs )
+   SparseSubvector<VT,AF,TF>::operator=( const DenseVector<VT2_,TF>& rhs )
 {
    using blaze::assign;
 
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE( typename VT2::ResultType );
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE( typename VT2_::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
-   if( RequiresEvaluation<VT2>::value || (~rhs).canAlias( &vector_ ) ) {
-      const typename VT2::ResultType tmp( ~rhs );
+   if( RequiresEvaluation<VT2_>::value || (~rhs).canAlias( &vector_ ) ) {
+      const typename VT2_::ResultType tmp( ~rhs );
       reset();
       assign( *this, tmp );
    }
@@ -1151,21 +1151,21 @@ inline SparseSubvector<VT,AF,TF>&
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side sparse vector
+template< typename VT2_ >  // Type of the right-hand side sparse vector
 inline SparseSubvector<VT,AF,TF>&
-   SparseSubvector<VT,AF,TF>::operator=( const SparseVector<VT2,TF>& rhs )
+   SparseSubvector<VT,AF,TF>::operator=( const SparseVector<VT2_,TF>& rhs )
 {
    using blaze::assign;
 
-   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( typename VT2::ResultType );
-   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2::ResultType, TF );
-   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( typename VT2_::ResultType );
+   BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( typename VT2_::ResultType, TF );
+   BLAZE_CONSTRAINT_MUST_NOT_REQUIRE_EVALUATION( typename VT2_::ResultType );
 
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
-   if( RequiresEvaluation<VT2>::value || (~rhs).canAlias( &vector_ ) ) {
-      const typename VT2::ResultType tmp( ~rhs );
+   if( RequiresEvaluation<VT2_>::value || (~rhs).canAlias( &vector_ ) ) {
+      const typename VT2_::ResultType tmp( ~rhs );
       reset();
       assign( *this, tmp );
    }
@@ -1192,9 +1192,9 @@ inline SparseSubvector<VT,AF,TF>&
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
+template< typename VT2_ >  // Type of the right-hand side vector
 inline SparseSubvector<VT,AF,TF>&
-   SparseSubvector<VT,AF,TF>::operator+=( const Vector<VT2,TF>& rhs )
+   SparseSubvector<VT,AF,TF>::operator+=( const Vector<VT2_,TF>& rhs )
 {
    using blaze::addAssign;
 
@@ -1221,9 +1221,9 @@ inline SparseSubvector<VT,AF,TF>&
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
+template< typename VT2_ >  // Type of the right-hand side vector
 inline SparseSubvector<VT,AF,TF>&
-   SparseSubvector<VT,AF,TF>::operator-=( const Vector<VT2,TF>& rhs )
+   SparseSubvector<VT,AF,TF>::operator-=( const Vector<VT2_,TF>& rhs )
 {
    using blaze::subAssign;
 
@@ -1251,14 +1251,14 @@ inline SparseSubvector<VT,AF,TF>&
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side vector
+template< typename VT2_ >  // Type of the right-hand side vector
 inline SparseSubvector<VT,AF,TF>&
-   SparseSubvector<VT,AF,TF>::operator*=( const Vector<VT2,TF>& rhs )
+   SparseSubvector<VT,AF,TF>::operator*=( const Vector<VT2_,TF>& rhs )
 {
    if( size() != (~rhs).size() )
       throw std::invalid_argument( "Vector sizes do not match" );
 
-   typedef typename MultTrait<ResultType,typename VT2::ResultType>::Type  MultType;
+   typedef typename MultTrait<ResultType,typename VT2_::ResultType>::Type  MultType;
 
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( ResultType );
    BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( MultType, TF );
@@ -1800,8 +1800,8 @@ inline bool SparseSubvector<VT,AF,TF>::isAliased( const Other* alias ) const
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void SparseSubvector<VT,AF,TF>::assign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void SparseSubvector<VT,AF,TF>::assign( const DenseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
    BLAZE_INTERNAL_ASSERT( nonZeros() == 0UL, "Invalid non-zero elements detected" );
@@ -1829,15 +1829,15 @@ inline void SparseSubvector<VT,AF,TF>::assign( const DenseVector<VT2,TF>& rhs )
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side sparse vector
-inline void SparseSubvector<VT,AF,TF>::assign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side sparse vector
+inline void SparseSubvector<VT,AF,TF>::assign( const SparseVector<VT2_,TF>& rhs )
 {
    BLAZE_INTERNAL_ASSERT( size() == (~rhs).size(), "Invalid vector sizes" );
    BLAZE_INTERNAL_ASSERT( nonZeros() == 0UL, "Invalid non-zero elements detected" );
 
    reserve( (~rhs).nonZeros() );
 
-   for( typename VT2::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element ) {
+   for( typename VT2_::ConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element ) {
       append( element->index(), element->value(), true );
    }
 }
@@ -1858,10 +1858,10 @@ inline void SparseSubvector<VT,AF,TF>::assign( const SparseVector<VT2,TF>& rhs )
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void SparseSubvector<VT,AF,TF>::addAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void SparseSubvector<VT,AF,TF>::addAssign( const DenseVector<VT2_,TF>& rhs )
 {
-   typedef typename AddTrait<ResultType,typename VT2::ResultType>::Type  AddType;
+   typedef typename AddTrait<ResultType,typename VT2_::ResultType>::Type  AddType;
 
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE( AddType );
    BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( AddType, TF );
@@ -1890,10 +1890,10 @@ inline void SparseSubvector<VT,AF,TF>::addAssign( const DenseVector<VT2,TF>& rhs
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side sparse vector
-inline void SparseSubvector<VT,AF,TF>::addAssign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side sparse vector
+inline void SparseSubvector<VT,AF,TF>::addAssign( const SparseVector<VT2_,TF>& rhs )
 {
-   typedef typename AddTrait<ResultType,typename VT2::ResultType>::Type  AddType;
+   typedef typename AddTrait<ResultType,typename VT2_::ResultType>::Type  AddType;
 
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( AddType );
    BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( AddType, TF );
@@ -1922,10 +1922,10 @@ inline void SparseSubvector<VT,AF,TF>::addAssign( const SparseVector<VT2,TF>& rh
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side dense vector
-inline void SparseSubvector<VT,AF,TF>::subAssign( const DenseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side dense vector
+inline void SparseSubvector<VT,AF,TF>::subAssign( const DenseVector<VT2_,TF>& rhs )
 {
-   typedef typename SubTrait<ResultType,typename VT2::ResultType>::Type  SubType;
+   typedef typename SubTrait<ResultType,typename VT2_::ResultType>::Type  SubType;
 
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE( SubType );
    BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( SubType, TF );
@@ -1954,10 +1954,10 @@ inline void SparseSubvector<VT,AF,TF>::subAssign( const DenseVector<VT2,TF>& rhs
 template< typename VT     // Type of the sparse vector
         , bool AF         // Alignment flag
         , bool TF >       // Transpose flag
-template< typename VT2 >  // Type of the right-hand side sparse vector
-inline void SparseSubvector<VT,AF,TF>::subAssign( const SparseVector<VT2,TF>& rhs )
+template< typename VT2_ >  // Type of the right-hand side sparse vector
+inline void SparseSubvector<VT,AF,TF>::subAssign( const SparseVector<VT2_,TF>& rhs )
 {
-   typedef typename SubTrait<ResultType,typename VT2::ResultType>::Type  SubType;
+   typedef typename SubTrait<ResultType,typename VT2_::ResultType>::Type  SubType;
 
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( SubType );
    BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( SubType, TF );

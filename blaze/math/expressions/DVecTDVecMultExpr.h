@@ -85,32 +85,32 @@ namespace blaze {
 // The DVecTDVecMultExpr class represents the compile time expression for outer products
 // between dense vectors.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-class DVecTDVecMultExpr : public DenseMatrix< DVecTDVecMultExpr<VT1,VT2>, false >
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+class DVecTDVecMultExpr : public DenseMatrix< DVecTDVecMultExpr<VT1_,VT2_>, false >
                         , private VecTVecMultExpr
                         , private Computation
 {
  private:
    //**Type definitions****************************************************************************
-   typedef typename VT1::ResultType     RT1;  //!< Result type of the left-hand side dense vector expression.
-   typedef typename VT2::ResultType     RT2;  //!< Result type of the right-hand side dense vector expression.
+   typedef typename VT1_::ResultType     RT1;  //!< Result type of the left-hand side dense vector expression.
+   typedef typename VT2_::ResultType     RT2;  //!< Result type of the right-hand side dense vector expression.
    typedef typename RT1::ElementType    ET1;  //!< Element type of the left-hand side dense vector expression.
    typedef typename RT2::ElementType    ET2;  //!< Element type of the right-hand side dense vector expression.
-   typedef typename VT1::ReturnType     RN1;  //!< Return type of the left-hand side dense vector expression.
-   typedef typename VT2::ReturnType     RN2;  //!< Return type of the right-hand side dense vector expression.
-   typedef typename VT1::CompositeType  CT1;  //!< Composite type of the left-hand side dense vector expression.
-   typedef typename VT2::CompositeType  CT2;  //!< Composite type of the right-hand side dense vector expression.
+   typedef typename VT1_::ReturnType     RN1;  //!< Return type of the left-hand side dense vector expression.
+   typedef typename VT2_::ReturnType     RN2;  //!< Return type of the right-hand side dense vector expression.
+   typedef typename VT1_::CompositeType  CT1;  //!< Composite type of the left-hand side dense vector expression.
+   typedef typename VT2_::CompositeType  CT2;  //!< Composite type of the right-hand side dense vector expression.
    //**********************************************************************************************
 
    //**********************************************************************************************
    //! Compilation switch for the composite type of the left-hand side dense vector expression.
-   enum { evaluateLeft = IsComputation<VT1>::value || RequiresEvaluation<VT1>::value };
+   enum { evaluateLeft = IsComputation<VT1_>::value || RequiresEvaluation<VT1_>::value };
    //**********************************************************************************************
 
    //**********************************************************************************************
    //! Compilation switch for the composite type of the right-hand side dense vector expression.
-   enum { evaluateRight = IsComputation<VT2>::value || RequiresEvaluation<VT2>::value };
+   enum { evaluateRight = IsComputation<VT2_>::value || RequiresEvaluation<VT2_>::value };
    //**********************************************************************************************
 
    //**Return type evaluation**********************************************************************
@@ -188,7 +188,7 @@ class DVecTDVecMultExpr : public DenseMatrix< DVecTDVecMultExpr<VT1,VT2>, false 
 
  public:
    //**Type definitions****************************************************************************
-   typedef DVecTDVecMultExpr<VT1,VT2>                  This;           //!< Type of this DVecTDVecMultExpr instance.
+   typedef DVecTDVecMultExpr<VT1_,VT2_>                  This;           //!< Type of this DVecTDVecMultExpr instance.
    typedef typename MultTrait<RT1,RT2>::Type           ResultType;     //!< Result type for expression template evaluations.
    typedef typename ResultType::OppositeType           OppositeType;   //!< Result type with opposite storage order for expression template evaluations.
    typedef typename ResultType::TransposeType          TransposeType;  //!< Transpose type for expression template evaluations.
@@ -202,10 +202,10 @@ class DVecTDVecMultExpr : public DenseMatrix< DVecTDVecMultExpr<VT1,VT2>, false 
    typedef typename SelectType< useAssign, const ResultType, const DVecTDVecMultExpr& >::Type  CompositeType;
 
    //! Composite type of the left-hand side dense vector expression.
-   typedef typename SelectType< IsExpression<VT1>::value, const VT1, const VT1& >::Type  LeftOperand;
+   typedef typename SelectType< IsExpression<VT1_>::value, const VT1_, const VT1_& >::Type  LeftOperand;
 
    //! Composite type of the right-hand side dense vector expression.
-   typedef typename SelectType< IsExpression<VT2>::value, const VT2, const VT2& >::Type  RightOperand;
+   typedef typename SelectType< IsExpression<VT2_>::value, const VT2_, const VT2_& >::Type  RightOperand;
 
    //! Type for the assignment of the left-hand side dense vector operand.
    typedef typename SelectType< evaluateLeft, const RT1, CT1 >::Type  LT;
@@ -235,10 +235,10 @@ class DVecTDVecMultExpr : public DenseMatrix< DVecTDVecMultExpr<VT1,VT2>, false 
       typedef DifferenceType    difference_type;    //!< Difference between two iterators.
 
       //! ConstIterator type of the left-hand side dense matrix expression.
-      typedef typename VT1::ConstIterator  LeftIteratorType;
+      typedef typename VT1_::ConstIterator  LeftIteratorType;
 
       //! ConstIterator type of the right-hand side dense matrix expression.
-      typedef typename VT2::ConstIterator  RightIteratorType;
+      typedef typename VT2_::ConstIterator  RightIteratorType;
       //*******************************************************************************************
 
       //**Constructor******************************************************************************
@@ -462,7 +462,7 @@ class DVecTDVecMultExpr : public DenseMatrix< DVecTDVecMultExpr<VT1,VT2>, false 
 
    //**Compilation flags***************************************************************************
    //! Compilation switch for the expression template evaluation strategy.
-   enum { vectorizable = VT1::vectorizable && VT2::vectorizable &&
+   enum { vectorizable = VT1_::vectorizable && VT2_::vectorizable &&
                          IsSame<ET1,ET2>::value &&
                          IntrinsicTrait<ET1>::multiplication };
 
@@ -476,7 +476,7 @@ class DVecTDVecMultExpr : public DenseMatrix< DVecTDVecMultExpr<VT1,VT2>, false 
    // \param lhs The left-hand side dense vector operand of the multiplication expression.
    // \param rhs The right-hand side dense vector operand of the multiplication expression.
    */
-   explicit inline DVecTDVecMultExpr( const VT1& lhs, const VT2& rhs )
+   explicit inline DVecTDVecMultExpr( const VT1_& lhs, const VT2_& rhs )
       : lhs_( lhs )  // Left-hand side dense vector of the multiplication expression
       , rhs_( rhs )  // Right-hand side dense vector of the multiplication expression
    {}
@@ -1500,10 +1500,10 @@ class DVecTDVecMultExpr : public DenseMatrix< DVecTDVecMultExpr<VT1,VT2>, false 
 
    //**Compile time checks*************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT1 );
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT2 );
-   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT1 );
-   BLAZE_CONSTRAINT_MUST_BE_ROW_VECTOR_TYPE   ( VT2 );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT1_ );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT2_ );
+   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE( VT1_ );
+   BLAZE_CONSTRAINT_MUST_BE_ROW_VECTOR_TYPE   ( VT2_ );
    /*! \endcond */
    //**********************************************************************************************
 };
@@ -1567,13 +1567,13 @@ inline const DVecTDVecMultExpr<T1,T2>
 
 //*************************************************************************************************
 /*! \cond BLAZE_INTERNAL */
-template< typename VT1, typename VT2, bool AF >
-struct SubmatrixExprTrait< DVecTDVecMultExpr<VT1,VT2>, AF >
+template< typename VT1_, typename VT2_, bool AF >
+struct SubmatrixExprTrait< DVecTDVecMultExpr<VT1_,VT2_>, AF >
 {
  public:
    //**********************************************************************************************
-   typedef typename MultExprTrait< typename SubvectorExprTrait<const VT1,AF>::Type
-                                 , typename SubvectorExprTrait<const VT2,AF>::Type >::Type  Type;
+   typedef typename MultExprTrait< typename SubvectorExprTrait<const VT1_,AF>::Type
+                                 , typename SubvectorExprTrait<const VT2_,AF>::Type >::Type  Type;
    //**********************************************************************************************
 };
 /*! \endcond */
@@ -1582,12 +1582,12 @@ struct SubmatrixExprTrait< DVecTDVecMultExpr<VT1,VT2>, AF >
 
 //*************************************************************************************************
 /*! \cond BLAZE_INTERNAL */
-template< typename VT1, typename VT2 >
-struct RowExprTrait< DVecTDVecMultExpr<VT1,VT2> >
+template< typename VT1_, typename VT2_ >
+struct RowExprTrait< DVecTDVecMultExpr<VT1_,VT2_> >
 {
  public:
    //**********************************************************************************************
-   typedef typename MultExprTrait< typename VT1::ReturnType, VT2 >::Type  Type;
+   typedef typename MultExprTrait< typename VT1_::ReturnType, VT2_ >::Type  Type;
    //**********************************************************************************************
 };
 /*! \endcond */
@@ -1596,12 +1596,12 @@ struct RowExprTrait< DVecTDVecMultExpr<VT1,VT2> >
 
 //*************************************************************************************************
 /*! \cond BLAZE_INTERNAL */
-template< typename VT1, typename VT2 >
-struct ColumnExprTrait< DVecTDVecMultExpr<VT1,VT2> >
+template< typename VT1_, typename VT2_ >
+struct ColumnExprTrait< DVecTDVecMultExpr<VT1_,VT2_> >
 {
  public:
    //**********************************************************************************************
-   typedef typename MultExprTrait< VT1, typename VT2::ReturnType >::Type  Type;
+   typedef typename MultExprTrait< VT1_, typename VT2_::ReturnType >::Type  Type;
    //**********************************************************************************************
 };
 /*! \endcond */

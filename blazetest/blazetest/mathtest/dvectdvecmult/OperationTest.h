@@ -84,26 +84,26 @@ namespace dvectdvecmult {
 /*!\brief Auxiliary class template for the dense vector/dense vector multiplication operation test.
 //
 // This class template represents one particular outer product test between two vectors of a
-// particular type. The two template arguments \a VT1 and \a VT2 represent the types of the
+// particular type. The two template arguments \a VT1_ and \a VT2_ represent the types of the
 // left-hand side and right-hand side vector, respectively.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
 class OperationTest
 {
  private:
    //**Type definitions****************************************************************************
-   typedef typename VT1::TransposeType                TVT1;  //!< Transpose vector type 1
-   typedef typename VT2::TransposeType                TVT2;  //!< Transpose vector type 2
-   typedef typename blaze::MultTrait<VT1,TVT2>::Type  RE;    //!< Default result type
+   typedef typename VT1_::TransposeType                TVT1_;  //!< Transpose vector type 1
+   typedef typename VT2_::TransposeType                TVT2_;  //!< Transpose vector type 2
+   typedef typename blaze::MultTrait<VT1_,TVT2_>::Type  RE;    //!< Default result type
    typedef typename RE::OppositeType                  ORE;   //!< Default result type with opposite storage order
    typedef typename RE::TransposeType                 TRE;   //!< Transpose default result type
    typedef typename ORE::TransposeType                TORE;  //!< Transpose default result type with opposite storage order
    //**********************************************************************************************
 
    //**Type definitions****************************************************************************
-   typedef typename VT1::ElementType           ET1;     //!< Element type 1
-   typedef typename VT2::ElementType           ET2;     //!< Element type 2
+   typedef typename VT1_::ElementType           ET1;     //!< Element type 1
+   typedef typename VT2_::ElementType           ET2;     //!< Element type 2
    typedef typename RE::ElementType            RET;     //!< Resulting element type
    typedef blaze::DynamicVector<ET1,false>     RT1;     //!< Reference type 1
    typedef blaze::CompressedVector<ET2,true>   RT2;     //!< Reference type 2
@@ -125,14 +125,14 @@ class OperationTest
    typedef TOSRRE                              TOSRE;   //!< Transpose sparse result type with opposite storage order
 
    //! Type of the outer product expression
-   typedef typename blaze::MultExprTrait<VT1,TVT2>::Type  VecTVecMultExprType;
+   typedef typename blaze::MultExprTrait<VT1_,TVT2_>::Type  VecTVecMultExprType;
    //**********************************************************************************************
 
  public:
    //**Constructors********************************************************************************
    /*!\name Constructors */
    //@{
-   explicit OperationTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 );
+   explicit OperationTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 );
    // No explicitly declared copy constructor.
    //@}
    //**********************************************************************************************
@@ -179,8 +179,8 @@ class OperationTest
    //**Member variables****************************************************************************
    /*!\name Member variables */
    //@{
-   VT1   lhs_;     //!< The left-hand side dense vector.
-   TVT2  rhs_;     //!< The right-hand side dense vector.
+   VT1_   lhs_;     //!< The left-hand side dense vector.
+   TVT2_  rhs_;     //!< The right-hand side dense vector.
    DRE   dres_;    //!< The dense result matrix.
    SRE   sres_;    //!< The sparse result matrix.
    ODRE  odres_;   //!< The dense result matrix with opposite storage order.
@@ -200,10 +200,10 @@ class OperationTest
 
    //**Compile time checks*************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT1    );
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT2    );
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TVT1   );
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TVT2   );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT1_    );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT2_    );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TVT1_   );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TVT2_   );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( RT1    );
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( RT2    );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_MATRIX_TYPE ( DRRE   );
@@ -222,10 +222,10 @@ class OperationTest
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_MATRIX_TYPE( TSRE   );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_MATRIX_TYPE ( TODRE  );
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_MATRIX_TYPE( TOSRE  );
-   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE      ( VT1    );
-   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE      ( VT2    );
-   BLAZE_CONSTRAINT_MUST_BE_ROW_VECTOR_TYPE         ( TVT1   );
-   BLAZE_CONSTRAINT_MUST_BE_ROW_VECTOR_TYPE         ( TVT2   );
+   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE      ( VT1_    );
+   BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE      ( VT2_    );
+   BLAZE_CONSTRAINT_MUST_BE_ROW_VECTOR_TYPE         ( TVT1_   );
+   BLAZE_CONSTRAINT_MUST_BE_ROW_VECTOR_TYPE         ( TVT2_   );
    BLAZE_CONSTRAINT_MUST_BE_COLUMN_VECTOR_TYPE      ( RT1    );
    BLAZE_CONSTRAINT_MUST_BE_ROW_VECTOR_TYPE         ( RT2    );
    BLAZE_CONSTRAINT_MUST_BE_ROW_MAJOR_MATRIX_TYPE   ( DRE    );
@@ -244,10 +244,10 @@ class OperationTest
    BLAZE_CONSTRAINT_MUST_BE_COLUMN_MAJOR_MATRIX_TYPE( TDRRE  );
    BLAZE_CONSTRAINT_MUST_BE_ROW_MAJOR_MATRIX_TYPE   ( TODRRE );
    BLAZE_CONSTRAINT_MUST_BE_ROW_MAJOR_MATRIX_TYPE   ( TODRRE );
-   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( ET1, typename TVT1::ElementType   );
-   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( ET2, typename TVT2::ElementType   );
-   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( VT1, typename TVT1::TransposeType );
-   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( VT2, typename TVT2::TransposeType );
+   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( ET1, typename TVT1_::ElementType   );
+   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( ET2, typename TVT2_::ElementType   );
+   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( VT1_, typename TVT1_::TransposeType );
+   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( VT2_, typename TVT2_::TransposeType );
    BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( RE , typename ORE::OppositeType   );
    BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( RE , typename TRE::TransposeType  );
    BLAZE_CONSTRAINT_MUST_BE_VECTVECMULTEXPR_TYPE( VecTVecMultExprType );
@@ -273,9 +273,9 @@ class OperationTest
 // \param creator2 The creator for the right-hand side dense vector of the vector outer product.
 // \exception std::runtime_error Operation error detected.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-OperationTest<VT1,VT2>::OperationTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+OperationTest<VT1_,VT2_>::OperationTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 )
    : lhs_( creator1() )           // The left-hand side dense vector
    , rhs_( trans( creator2() ) )  // The right-hand side dense vector
    , dres_()                      // The dense result matrix
@@ -327,9 +327,9 @@ OperationTest<VT1,VT2>::OperationTest( const Creator<VT1>& creator1, const Creat
 // This function runs tests on the initial status of the vectors. In case any initialization
 // error is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testInitialStatus()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testInitialStatus()
 {
    // Checking the size of the left-hand side operand
    if( lhs_.size() != reflhs_.size() ) {
@@ -338,7 +338,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector size\n"
           << " Details:\n"
           << "   Dense vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Detected size = " << lhs_.size() << "\n"
           << "   Expected size = " << reflhs_.size() << "\n";
       throw std::runtime_error( oss.str() );
@@ -351,7 +351,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector size\n"
           << " Details:\n"
           << "   Transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Detected size = " << rhs_.size() << "\n"
           << "   Expected size = " << refrhs_.size() << "\n";
       throw std::runtime_error( oss.str() );
@@ -364,7 +364,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Dense vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Current initialization:\n" << lhs_ << "\n"
           << "   Expected initialization:\n" << reflhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -377,7 +377,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Current initialization:\n" << rhs_ << "\n"
           << "   Expected initialization:\n" << refrhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -395,9 +395,9 @@ void OperationTest<VT1,VT2>::testInitialStatus()
 // This function tests the matrix assignment. In case any error is detected, a
 // \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testAssignment()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testAssignment()
 {
    try {
       lhs_ = reflhs_;
@@ -409,9 +409,9 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Failed assignment\n"
           << " Details:\n"
           << "   Left-hand side dense vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Error message: " << ex.what() << "\n";
       throw std::runtime_error( oss.str() );
    }
@@ -422,7 +422,7 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Dense vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Current initialization:\n" << lhs_ << "\n"
           << "   Expected initialization:\n" << reflhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -434,7 +434,7 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Current initialization:\n" << rhs_ << "\n"
           << "   Expected initialization:\n" << refrhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -452,9 +452,9 @@ void OperationTest<VT1,VT2>::testAssignment()
 // This function tests the element access via the subscript operator. In case any
 // error is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testElementAccess()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testElementAccess()
 {
    using blaze::equal;
 
@@ -466,9 +466,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at element (0,0) detected\n"
              << " Details:\n"
              << "   Left-hand side dense vector type:\n"
-             << "     " << typeid( VT1 ).name() << "\n"
+             << "     " << typeid( VT1_ ).name() << "\n"
              << "   Right-hand side transpose dense vector type:\n"
-             << "     " << typeid( TVT2 ).name() << "\n";
+             << "     " << typeid( TVT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -478,9 +478,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at element (0,0) detected\n"
              << " Details:\n"
              << "   Left-hand side dense vector type:\n"
-             << "     " << typeid( VT1 ).name() << "\n"
+             << "     " << typeid( VT1_ ).name() << "\n"
              << "   Right-hand side transpose dense vector type:\n"
-             << "     " << typeid( TVT2 ).name() << "\n";
+             << "     " << typeid( TVT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -490,9 +490,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at element (0,0) detected\n"
              << " Details:\n"
              << "   Left-hand side dense vector type:\n"
-             << "     " << typeid( VT1 ).name() << "\n"
+             << "     " << typeid( VT1_ ).name() << "\n"
              << "   Right-hand side transpose dense vector type:\n"
-             << "     " << typeid( TVT2 ).name() << "\n";
+             << "     " << typeid( TVT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -502,9 +502,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at element (0,0) detected\n"
              << " Details:\n"
              << "   Left-hand side dense vector type:\n"
-             << "     " << typeid( VT1 ).name() << "\n"
+             << "     " << typeid( VT1_ ).name() << "\n"
              << "   Right-hand side transpose dense vector type:\n"
-             << "     " << typeid( TVT2 ).name() << "\n";
+             << "     " << typeid( TVT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
    }
@@ -522,9 +522,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
 // and subtraction assignment. In case any error resulting from the outer product or the
 // subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testBasicOperation()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testBasicOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_BASIC_OPERATION
    if( BLAZETEST_MATHTEST_TEST_BASIC_OPERATION > 1 )
@@ -678,9 +678,9 @@ void OperationTest<VT1,VT2>::testBasicOperation()
 // and subtraction assignment. In case any error resulting from the outer product or the
 // subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testNegatedOperation()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testNegatedOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_NEGATED_OPERATION
    if( BLAZETEST_MATHTEST_TEST_NEGATED_OPERATION > 1 )
@@ -835,10 +835,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
 // and subtraction assignment. In case any error resulting from the outer product or the
 // subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
 template< typename T >    // Type of the scalar
-void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
+void OperationTest<VT1_,VT2_>::testScaledOperation( T scalar )
 {
    BLAZE_CONSTRAINT_MUST_BE_NUMERIC_TYPE( T );
 
@@ -1443,9 +1443,9 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
 // and subtraction assignment. In case any error resulting from the outer product or the
 // subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testTransposeOperation()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testTransposeOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_TRANSPOSE_OPERATION
    if( BLAZETEST_MATHTEST_TEST_TRANSPOSE_OPERATION > 1 )
@@ -1509,9 +1509,9 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
 // and subtraction assignment. In case any error resulting from the outer product or the
 // subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testAbsOperation()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testAbsOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_ABS_OPERATION
    if( BLAZETEST_MATHTEST_TEST_ABS_OPERATION > 1 )
@@ -1665,9 +1665,9 @@ void OperationTest<VT1,VT2>::testAbsOperation()
 // assignment, and subtraction assignment. In case any error resulting from the outer product
 // or the subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testSubmatrixOperation()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testSubmatrixOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_SUBMATRIX_OPERATION
    if( BLAZETEST_MATHTEST_TEST_SUBMATRIX_OPERATION > 1 )
@@ -1861,9 +1861,9 @@ void OperationTest<VT1,VT2>::testSubmatrixOperation()
 // and subtraction assignment. In case any error resulting from the outer product or the
 // subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testRowOperation()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testRowOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_ROW_OPERATION
    if( BLAZETEST_MATHTEST_TEST_ROW_OPERATION > 1 )
@@ -2029,9 +2029,9 @@ void OperationTest<VT1,VT2>::testRowOperation()
 // and subtraction assignment. In case any error resulting from the outer product or the
 // subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testColumnOperation()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testColumnOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_COLUMN_OPERATION
    if( BLAZETEST_MATHTEST_TEST_COLUMN_OPERATION > 1 )
@@ -2204,9 +2204,9 @@ void OperationTest<VT1,VT2>::testColumnOperation()
 //
 // This function is called after each test case to check and compare the computed results.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::checkResults()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::checkResults()
 {
    if( !isEqual( dres_, refres_ ) || !isEqual( odres_, refres_ ) ) {
       std::ostringstream oss;
@@ -2215,9 +2215,9 @@ void OperationTest<VT1,VT2>::checkResults()
           << " Error: Incorrect dense result detected\n"
           << " Details:\n"
           << "   Left-hand side dense vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Result:\n" << dres_ << "\n"
           << "   Result with opposite storage order:\n" << odres_ << "\n"
           << "   Expected result:\n" << refres_ << "\n";
@@ -2231,9 +2231,9 @@ void OperationTest<VT1,VT2>::checkResults()
           << " Error: Incorrect sparse result detected\n"
           << " Details:\n"
           << "   Left-hand side dense vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Result:\n" << sres_ << "\n"
           << "   Result with opposite storage order:\n" << osres_ << "\n"
           << "   Expected result:\n" << refres_ << "\n";
@@ -2253,9 +2253,9 @@ void OperationTest<VT1,VT2>::checkResults()
 // This function is called after each test case to check and compare the computed transpose
 // results.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::checkTransposeResults()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::checkTransposeResults()
 {
    if( !isEqual( tdres_, refres_ ) || !isEqual( todres_, refres_ ) ) {
       std::ostringstream oss;
@@ -2264,9 +2264,9 @@ void OperationTest<VT1,VT2>::checkTransposeResults()
           << " Error: Incorrect transpose dense result detected\n"
           << " Details:\n"
           << "   Left-hand side dense vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Transpose result:\n" << tdres_ << "\n"
           << "   Transpose result with opposite storage order:\n" << todres_ << "\n"
           << "   Expected result:\n" << refres_ << "\n";
@@ -2280,9 +2280,9 @@ void OperationTest<VT1,VT2>::checkTransposeResults()
           << " Error: Incorrect transpose sparse result detected\n"
           << " Details:\n"
           << "   Left-hand side dense vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Transpose result:\n" << tsres_ << "\n"
           << "   Transpose result with opposite storage order:\n" << tosres_ << "\n"
           << "   Expected result:\n" << refres_ << "\n";
@@ -2308,9 +2308,9 @@ void OperationTest<VT1,VT2>::checkTransposeResults()
 // This function is called before each non-transpose test case to initialize the according result
 // matrices to random values.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::initResults()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::initResults()
 {
    const typename blaze::BaseElementType<RE>::Type min( randmin );
    const typename blaze::BaseElementType<RE>::Type max( randmax );
@@ -2332,9 +2332,9 @@ void OperationTest<VT1,VT2>::initResults()
 // This function is called before each transpose test case to initialize the according result
 // matrices to random values.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::initTransposeResults()
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::initTransposeResults()
 {
    const typename blaze::BaseElementType<RE>::Type min( randmin );
    const typename blaze::BaseElementType<RE>::Type max( randmax );
@@ -2359,18 +2359,18 @@ void OperationTest<VT1,VT2>::initTransposeResults()
 // the function extends the given exception message by all available information for the failed
 // test.
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::convertException( const std::exception& ex )
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::convertException( const std::exception& ex )
 {
    std::ostringstream oss;
    oss << " Test : " << test_ << "\n"
        << " Error: " << error_ << "\n"
        << " Details:\n"
        << "   Left-hand side dense vector type:\n"
-       << "     " << typeid( VT1 ).name() << "\n"
+       << "     " << typeid( VT1_ ).name() << "\n"
        << "   Right-hand side transpose dense vector type:\n"
-       << "     " << typeid( TVT2 ).name() << "\n"
+       << "     " << typeid( TVT2_ ).name() << "\n"
        << "   Error message: " << ex.what() << "\n";
    throw std::runtime_error( oss.str() );
 }
@@ -2392,12 +2392,12 @@ void OperationTest<VT1,VT2>::convertException( const std::exception& ex )
 // \param creator2 The creator for the right-hand side vector.
 // \return void
 */
-template< typename VT1    // Type of the left-hand side dense vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void runTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
+template< typename VT1_    // Type of the left-hand side dense vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void runTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 )
 {
    for( size_t rep=0; rep<repetitions; ++rep ) {
-      OperationTest<VT1,VT2>( creator1, creator2 );
+      OperationTest<VT1_,VT2_>( creator1, creator2 );
    }
 }
 //*************************************************************************************************
@@ -2415,8 +2415,8 @@ void runTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
 /*! \cond BLAZE_INTERNAL */
 /*!\brief Macro for the definition of a dense vector/dense vector outer product test case.
 */
-#define DEFINE_DVECTDVECMULT_OPERATION_TEST( VT1, VT2 ) \
-   extern template class blazetest::mathtest::dvectdvecmult::OperationTest<VT1,VT2>
+#define DEFINE_DVECTDVECMULT_OPERATION_TEST( VT1_, VT2_ ) \
+   extern template class blazetest::mathtest::dvectdvecmult::OperationTest<VT1_,VT2_>
 /*! \endcond */
 //*************************************************************************************************
 

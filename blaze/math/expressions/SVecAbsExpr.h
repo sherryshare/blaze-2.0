@@ -126,7 +126,7 @@ class SVecAbsExpr : public SparseVector< SVecAbsExpr<VT,TF>, TF >
 
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct UseAssign {
       enum { value = useAssign };
    };
@@ -409,9 +409,9 @@ class SVecAbsExpr : public SparseVector< SVecAbsExpr<VT,TF>, TF >
    // principle, this operator can only be selected by the compiler in case the operand
    // requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( DenseVector<VT2,TF>& lhs, const SVecAbsExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( DenseVector<VT2_,TF>& lhs, const SVecAbsExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -439,9 +439,9 @@ class SVecAbsExpr : public SparseVector< SVecAbsExpr<VT,TF>, TF >
    // principle, this operator can only be selected by the compiler in case the operand
    // requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( SparseVector<VT2,TF>& lhs, const SVecAbsExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( SparseVector<VT2_,TF>& lhs, const SVecAbsExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -449,7 +449,7 @@ class SVecAbsExpr : public SparseVector< SVecAbsExpr<VT,TF>, TF >
 
       BLAZE_INTERNAL_ASSERT( (~lhs).size() == rhs.size(), "Invalid vector sizes" );
 
-      typedef typename VT2::Iterator  Iterator;
+      typedef typename VT2_::Iterator  Iterator;
 
       assign( ~lhs, rhs.sv_ );
 
@@ -475,9 +475,9 @@ class SVecAbsExpr : public SparseVector< SVecAbsExpr<VT,TF>, TF >
    // SFINAE principle, this operator can only be selected by the compiler in case the
    // operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      addAssign( DenseVector<VT2,TF>& lhs, const SVecAbsExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      addAssign( DenseVector<VT2_,TF>& lhs, const SVecAbsExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -511,9 +511,9 @@ class SVecAbsExpr : public SparseVector< SVecAbsExpr<VT,TF>, TF >
    // SFINAE principle, this operator can only be selected by the compiler in case the
    // operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      subAssign( DenseVector<VT2,TF>& lhs, const SVecAbsExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      subAssign( DenseVector<VT2_,TF>& lhs, const SVecAbsExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -547,9 +547,9 @@ class SVecAbsExpr : public SparseVector< SVecAbsExpr<VT,TF>, TF >
    // principle, this operator can only be selected by the compiler in case the operand
    // requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      multAssign( DenseVector<VT2,TF>& lhs, const SVecAbsExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      multAssign( DenseVector<VT2_,TF>& lhs, const SVecAbsExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 

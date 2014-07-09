@@ -373,10 +373,10 @@ class DVecTransposer : public DenseVector< DVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side dense vector
-   inline void assign( const DenseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side dense vector
+   inline void assign( const DenseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( dv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -405,14 +405,14 @@ class DVecTransposer : public DenseVector< DVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side sparse vector
-   inline void assign( const SparseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side sparse vector
+   inline void assign( const SparseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( dv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
-      typedef typename VT2::ConstIterator  RhsConstIterator;
+      typedef typename VT2_::ConstIterator  RhsConstIterator;
 
       for( RhsConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
          dv_[element->index()] = element->value();
@@ -430,10 +430,10 @@ class DVecTransposer : public DenseVector< DVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side dense vector
-   inline void addAssign( const DenseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side dense vector
+   inline void addAssign( const DenseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( dv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -462,14 +462,14 @@ class DVecTransposer : public DenseVector< DVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side sparse vector
-   inline void addAssign( const SparseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side sparse vector
+   inline void addAssign( const SparseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( dv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
-      typedef typename VT2::ConstIterator  RhsConstIterator;
+      typedef typename VT2_::ConstIterator  RhsConstIterator;
 
       for( RhsConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
          dv_[element->index()] += element->value();
@@ -487,10 +487,10 @@ class DVecTransposer : public DenseVector< DVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side dense vector
-   inline void subAssign( const DenseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side dense vector
+   inline void subAssign( const DenseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( dv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -519,14 +519,14 @@ class DVecTransposer : public DenseVector< DVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side sparse vector
-   inline void subAssign( const SparseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side sparse vector
+   inline void subAssign( const SparseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( dv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
-      typedef typename VT2::ConstIterator  RhsConstIterator;
+      typedef typename VT2_::ConstIterator  RhsConstIterator;
 
       for( RhsConstIterator element=(~rhs).begin(); element!=(~rhs).end(); ++element )
          dv_[element->index()] -= element->value();
@@ -544,10 +544,10 @@ class DVecTransposer : public DenseVector< DVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side dense vector
-   inline void multAssign( const DenseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side dense vector
+   inline void multAssign( const DenseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( dv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
@@ -576,14 +576,14 @@ class DVecTransposer : public DenseVector< DVecTransposer<VT,TF>, TF >
    // in erroneous results and/or in compilation errors. Instead of using this function use the
    // assignment operator.
    */
-   template< typename VT2 >  // Type of the right-hand side dense vector
-   inline void multAssign( const SparseVector<VT2,TF>& rhs )
+   template< typename VT2_ >  // Type of the right-hand side dense vector
+   inline void multAssign( const SparseVector<VT2_,TF>& rhs )
    {
-      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2, TF );
+      BLAZE_CONSTRAINT_MUST_BE_VECTOR_WITH_TRANSPOSE_FLAG( VT2_, TF );
 
       BLAZE_INTERNAL_ASSERT( dv_.size() == (~rhs).size(), "Invalid vector sizes" );
 
-      typedef typename VT2::ConstIterator  RhsConstIterator;
+      typedef typename VT2_::ConstIterator  RhsConstIterator;
 
       const VT tmp( dv_ );
       dv_.reset();

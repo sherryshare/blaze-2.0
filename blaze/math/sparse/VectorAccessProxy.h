@@ -387,8 +387,8 @@ inline void VectorAccessProxy<VT>::set( ConstReference value ) const
 //*************************************************************************************************
 /*!\name VectorAccessProxy operators */
 //@{
-template< typename VT1, typename VT2 >
-inline bool operator==( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs );
+template< typename VT1_, typename VT2_ >
+inline bool operator==( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs );
 
 template< typename VT, typename T >
 inline bool operator==( const VectorAccessProxy<VT>& lhs, const T& rhs );
@@ -396,8 +396,8 @@ inline bool operator==( const VectorAccessProxy<VT>& lhs, const T& rhs );
 template< typename T, typename VT >
 inline bool operator==( const T& lhs, const VectorAccessProxy<VT>& rhs );
 
-template< typename VT1, typename VT2 >
-inline bool operator!=( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs );
+template< typename VT1_, typename VT2_ >
+inline bool operator!=( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs );
 
 template< typename VT, typename T >
 inline bool operator!=( const VectorAccessProxy<VT>& lhs, const T& rhs );
@@ -405,8 +405,8 @@ inline bool operator!=( const VectorAccessProxy<VT>& lhs, const T& rhs );
 template< typename T, typename VT >
 inline bool operator!=( const T& lhs, const VectorAccessProxy<VT>& rhs );
 
-template< typename VT1, typename VT2 >
-inline bool operator<( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs );
+template< typename VT1_, typename VT2_ >
+inline bool operator<( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs );
 
 template< typename VT, typename T >
 inline bool operator<( const VectorAccessProxy<VT>& lhs, const T& rhs );
@@ -414,8 +414,8 @@ inline bool operator<( const VectorAccessProxy<VT>& lhs, const T& rhs );
 template< typename T, typename VT >
 inline bool operator<( const T& lhs, const VectorAccessProxy<VT>& rhs );
 
-template< typename VT1, typename VT2 >
-inline bool operator>( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs );
+template< typename VT1_, typename VT2_ >
+inline bool operator>( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs );
 
 template< typename VT, typename T >
 inline bool operator>( const VectorAccessProxy<VT>& lhs, const T& rhs );
@@ -423,8 +423,8 @@ inline bool operator>( const VectorAccessProxy<VT>& lhs, const T& rhs );
 template< typename T, typename VT >
 inline bool operator>( const T& lhs, const VectorAccessProxy<VT>& rhs );
 
-template< typename VT1, typename VT2 >
-inline bool operator<=( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs );
+template< typename VT1_, typename VT2_ >
+inline bool operator<=( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs );
 
 template< typename VT, typename T >
 inline bool operator<=( const VectorAccessProxy<VT>& lhs, const T& rhs );
@@ -432,8 +432,8 @@ inline bool operator<=( const VectorAccessProxy<VT>& lhs, const T& rhs );
 template< typename T, typename VT >
 inline bool operator<=( const T& lhs, const VectorAccessProxy<VT>& rhs );
 
-template< typename VT1, typename VT2 >
-inline bool operator>=( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs );
+template< typename VT1_, typename VT2_ >
+inline bool operator>=( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs );
 
 template< typename VT, typename T >
 inline bool operator>=( const VectorAccessProxy<VT>& lhs, const T& rhs );
@@ -452,11 +452,11 @@ inline bool operator>=( const T& lhs, const VectorAccessProxy<VT>& rhs );
 // \param rhs The right-hand side VectorAccessProxy object.
 // \return \a true if both referenced values are equal, \a false if they are not.
 */
-template< typename VT1, typename VT2 >
-inline bool operator==( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs )
+template< typename VT1_, typename VT2_ >
+inline bool operator==( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs )
 {
-   typedef typename VectorAccessProxy<VT1>::Reference  LhsReference;
-   typedef typename VectorAccessProxy<VT2>::Reference  RhsReference;
+   typedef typename VectorAccessProxy<VT1_>::Reference  LhsReference;
+   typedef typename VectorAccessProxy<VT2_>::Reference  RhsReference;
    return ( static_cast<LhsReference>( lhs ) == static_cast<RhsReference>( rhs ) );
 }
 //*************************************************************************************************
@@ -504,11 +504,11 @@ inline bool operator==( const T& lhs, const VectorAccessProxy<VT>& rhs )
 // \param rhs The right-hand side VectorAccessProxy object.
 // \return \a true if both referenced values are not equal, \a false if they are.
 */
-template< typename VT1, typename VT2 >
-inline bool operator!=( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs )
+template< typename VT1_, typename VT2_ >
+inline bool operator!=( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs )
 {
-   typedef typename VectorAccessProxy<VT1>::Reference  LhsReference;
-   typedef typename VectorAccessProxy<VT2>::Reference  RhsReference;
+   typedef typename VectorAccessProxy<VT1_>::Reference  LhsReference;
+   typedef typename VectorAccessProxy<VT2_>::Reference  RhsReference;
    return ( static_cast<LhsReference>( lhs ) != static_cast<RhsReference>( rhs ) );
 }
 //*************************************************************************************************
@@ -556,11 +556,11 @@ inline bool operator!=( const T& lhs, const VectorAccessProxy<VT>& rhs )
 // \param rhs The right-hand side VectorAccessProxy object.
 // \return \a true if the left-hand side referenced value is smaller, \a false if not.
 */
-template< typename VT1, typename VT2 >
-inline bool operator<( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs )
+template< typename VT1_, typename VT2_ >
+inline bool operator<( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs )
 {
-   typedef typename VectorAccessProxy<VT1>::Reference  LhsReference;
-   typedef typename VectorAccessProxy<VT2>::Reference  RhsReference;
+   typedef typename VectorAccessProxy<VT1_>::Reference  LhsReference;
+   typedef typename VectorAccessProxy<VT2_>::Reference  RhsReference;
    return ( static_cast<LhsReference>( lhs ) < static_cast<RhsReference>( rhs ) );
 }
 //*************************************************************************************************
@@ -608,11 +608,11 @@ inline bool operator<( const T& lhs, const VectorAccessProxy<VT>& rhs )
 // \param rhs The right-hand side VectorAccessProxy object.
 // \return \a true if the left-hand side referenced value is greater, \a false if not.
 */
-template< typename VT1, typename VT2 >
-inline bool operator>( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs )
+template< typename VT1_, typename VT2_ >
+inline bool operator>( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs )
 {
-   typedef typename VectorAccessProxy<VT1>::Reference  LhsReference;
-   typedef typename VectorAccessProxy<VT2>::Reference  RhsReference;
+   typedef typename VectorAccessProxy<VT1_>::Reference  LhsReference;
+   typedef typename VectorAccessProxy<VT2_>::Reference  RhsReference;
    return ( static_cast<LhsReference>( lhs ) > static_cast<RhsReference>( rhs ) );
 }
 //*************************************************************************************************
@@ -660,11 +660,11 @@ inline bool operator>( const T& lhs, const VectorAccessProxy<VT>& rhs )
 // \param rhs The right-hand side VectorAccessProxy object.
 // \return \a true if the left-hand side referenced value is smaller or equal, \a false if not.
 */
-template< typename VT1, typename VT2 >
-inline bool operator<=( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs )
+template< typename VT1_, typename VT2_ >
+inline bool operator<=( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs )
 {
-   typedef typename VectorAccessProxy<VT1>::Reference  LhsReference;
-   typedef typename VectorAccessProxy<VT2>::Reference  RhsReference;
+   typedef typename VectorAccessProxy<VT1_>::Reference  LhsReference;
+   typedef typename VectorAccessProxy<VT2_>::Reference  RhsReference;
    return ( static_cast<LhsReference>( lhs ) <= static_cast<RhsReference>( rhs ) );
 }
 //*************************************************************************************************
@@ -712,11 +712,11 @@ inline bool operator<=( const T& lhs, const VectorAccessProxy<VT>& rhs )
 // \param rhs The right-hand side VectorAccessProxy object.
 // \return \a true if the left-hand side referenced value is greater or equal, \a false if not.
 */
-template< typename VT1, typename VT2 >
-inline bool operator>=( const VectorAccessProxy<VT1>& lhs, const VectorAccessProxy<VT2>& rhs )
+template< typename VT1_, typename VT2_ >
+inline bool operator>=( const VectorAccessProxy<VT1_>& lhs, const VectorAccessProxy<VT2_>& rhs )
 {
-   typedef typename VectorAccessProxy<VT1>::Reference  LhsReference;
-   typedef typename VectorAccessProxy<VT2>::Reference  RhsReference;
+   typedef typename VectorAccessProxy<VT1_>::Reference  LhsReference;
+   typedef typename VectorAccessProxy<VT2_>::Reference  RhsReference;
    return ( static_cast<LhsReference>( lhs ) >= static_cast<RhsReference>( rhs ) );
 }
 //*************************************************************************************************

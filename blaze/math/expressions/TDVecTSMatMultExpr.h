@@ -114,7 +114,7 @@ class TDVecTSMatMultExpr : public DenseVector< TDVecTSMatMultExpr<VT,MT>, true >
    //**********************************************************************************************
    /*! \cond BLAZE_INTERNAL */
    //! Helper structure for the explicit application of the SFINAE principle.
-   template< typename VT2 >
+   template< typename VT2_ >
    struct UseAssign {
       enum { value = useAssign };
    };
@@ -295,9 +295,9 @@ class TDVecTSMatMultExpr : public DenseVector< TDVecTSMatMultExpr<VT,MT>, true >
    // case either the left-hand side vector operand is a compound expression or the right-hand
    // side matrix operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( DenseVector<VT2,true>& lhs, const TDVecTSMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( DenseVector<VT2_,true>& lhs, const TDVecTSMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -337,9 +337,9 @@ class TDVecTSMatMultExpr : public DenseVector< TDVecTSMatMultExpr<VT,MT>, true >
    // case either the left-hand side vector operand is a compound expression or the right-hand
    // side matrix operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target sparse vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      assign( SparseVector<VT2,true>& lhs, const TDVecTSMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target sparse vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      assign( SparseVector<VT2_,true>& lhs, const TDVecTSMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -369,9 +369,9 @@ class TDVecTSMatMultExpr : public DenseVector< TDVecTSMatMultExpr<VT,MT>, true >
    // by the compiler in case either the left-hand side vector operand is a compound expression
    // or the right-hand side matrix operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      addAssign( DenseVector<VT2,true>& lhs, const TDVecTSMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      addAssign( DenseVector<VT2_,true>& lhs, const TDVecTSMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -414,9 +414,9 @@ class TDVecTSMatMultExpr : public DenseVector< TDVecTSMatMultExpr<VT,MT>, true >
    // the compiler in case either the left-hand side vector operand is a compound expression
    // or the right-hand side matrix operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      subAssign( DenseVector<VT2,true>& lhs, const TDVecTSMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      subAssign( DenseVector<VT2_,true>& lhs, const TDVecTSMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 
@@ -459,9 +459,9 @@ class TDVecTSMatMultExpr : public DenseVector< TDVecTSMatMultExpr<VT,MT>, true >
    // compiler in case either the left-hand side vector operand is a compound expression or the
    // right-hand side matrix operand requires an intermediate evaluation.
    */
-   template< typename VT2 >  // Type of the target dense vector
-   friend inline typename EnableIf< UseAssign<VT2> >::Type
-      multAssign( DenseVector<VT2,true>& lhs, const TDVecTSMatMultExpr& rhs )
+   template< typename VT2_ >  // Type of the target dense vector
+   friend inline typename EnableIf< UseAssign<VT2_> >::Type
+      multAssign( DenseVector<VT2_,true>& lhs, const TDVecTSMatMultExpr& rhs )
    {
       BLAZE_FUNCTION_TRACE;
 

@@ -81,11 +81,11 @@ namespace blaze {
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -111,12 +111,12 @@ inline void smpAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side dense vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF2 >    // Transpose flag of the right-hand side dense vector
-typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
-   smpAssign( DenseVector<VT1,TF1>& lhs, const DenseVector<VT2,TF2>& rhs )
+typename EnableIfTrue< VT1_::smpAssignable && VT2_::smpAssignable >::Type
+   smpAssign( DenseVector<VT1_,TF1>& lhs, const DenseVector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -127,13 +127,13 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
       return;
    }
 
-   typedef typename VT1::ElementType                         ET1;
-   typedef typename VT2::ElementType                         ET2;
-   typedef IntrinsicTrait<typename VT1::ElementType>         IT;
-   typedef typename SubvectorExprTrait<VT1,aligned>::Type    AlignedTarget;
-   typedef typename SubvectorExprTrait<VT1,unaligned>::Type  UnalignedTarget;
+   typedef typename VT1_::ElementType                         ET1;
+   typedef typename VT2_::ElementType                         ET2;
+   typedef IntrinsicTrait<typename VT1_::ElementType>         IT;
+   typedef typename SubvectorExprTrait<VT1_,aligned>::Type    AlignedTarget;
+   typedef typename SubvectorExprTrait<VT1_,unaligned>::Type  UnalignedTarget;
 
-   const bool vectorizable( VT1::vectorizable && VT2::vectorizable && IsSame<ET1,ET2>::value );
+   const bool vectorizable( VT1_::vectorizable && VT2_::vectorizable && IsSame<ET1,ET2>::value );
    const bool lhsAligned  ( (~lhs).isAligned() );
    const bool rhsAligned  ( (~rhs).isAligned() );
 
@@ -193,12 +193,12 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side dense vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF2 >    // Transpose flag of the right-hand side dense vector
-typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
-   smpAssign( DenseVector<VT1,TF1>& lhs, const SparseVector<VT2,TF2>& rhs )
+typename EnableIfTrue< VT1_::smpAssignable && VT2_::smpAssignable >::Type
+   smpAssign( DenseVector<VT1_,TF1>& lhs, const SparseVector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -209,9 +209,9 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
       return;
    }
 
-   typedef typename VT1::ElementType                         ET1;
-   typedef typename VT2::ElementType                         ET2;
-   typedef typename SubvectorExprTrait<VT1,unaligned>::Type  UnalignedTarget;
+   typedef typename VT1_::ElementType                         ET1;
+   typedef typename VT2_::ElementType                         ET2;
+   typedef typename SubvectorExprTrait<VT1_,unaligned>::Type  UnalignedTarget;
 
 #pragma omp parallel shared( lhs, rhs )
    {
@@ -254,11 +254,11 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpAddAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpAddAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -286,12 +286,12 @@ inline void smpAddAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs 
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side dense vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF2 >    // Transpose flag of the right-hand side dense vector
-typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
-   smpAddAssign( DenseVector<VT1,TF1>& lhs, const DenseVector<VT2,TF2>& rhs )
+typename EnableIfTrue< VT1_::smpAssignable && VT2_::smpAssignable >::Type
+   smpAddAssign( DenseVector<VT1_,TF1>& lhs, const DenseVector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -302,13 +302,13 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
       return;
    }
 
-   typedef typename VT1::ElementType                         ET1;
-   typedef typename VT2::ElementType                         ET2;
-   typedef IntrinsicTrait<typename VT1::ElementType>         IT;
-   typedef typename SubvectorExprTrait<VT1,aligned>::Type    AlignedTarget;
-   typedef typename SubvectorExprTrait<VT1,unaligned>::Type  UnalignedTarget;
+   typedef typename VT1_::ElementType                         ET1;
+   typedef typename VT2_::ElementType                         ET2;
+   typedef IntrinsicTrait<typename VT1_::ElementType>         IT;
+   typedef typename SubvectorExprTrait<VT1_,aligned>::Type    AlignedTarget;
+   typedef typename SubvectorExprTrait<VT1_,unaligned>::Type  UnalignedTarget;
 
-   const bool vectorizable( VT1::vectorizable && VT2::vectorizable && IsSame<ET1,ET2>::value );
+   const bool vectorizable( VT1_::vectorizable && VT2_::vectorizable && IsSame<ET1,ET2>::value );
    const bool lhsAligned  ( (~lhs).isAligned() );
    const bool rhsAligned  ( (~rhs).isAligned() );
 
@@ -370,12 +370,12 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side dense vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF2 >    // Transpose flag of the right-hand side dense vector
-typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
-   smpAddAssign( DenseVector<VT1,TF1>& lhs, const SparseVector<VT2,TF2>& rhs )
+typename EnableIfTrue< VT1_::smpAssignable && VT2_::smpAssignable >::Type
+   smpAddAssign( DenseVector<VT1_,TF1>& lhs, const SparseVector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -386,9 +386,9 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
       return;
    }
 
-   typedef typename VT1::ElementType                         ET1;
-   typedef typename VT2::ElementType                         ET2;
-   typedef typename SubvectorExprTrait<VT1,unaligned>::Type  UnalignedTarget;
+   typedef typename VT1_::ElementType                         ET1;
+   typedef typename VT2_::ElementType                         ET2;
+   typedef typename SubvectorExprTrait<VT1_,unaligned>::Type  UnalignedTarget;
 
 #pragma omp parallel shared( lhs, rhs )
    {
@@ -431,11 +431,11 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpSubAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpSubAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -463,12 +463,12 @@ inline void smpSubAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs 
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side dense vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF2 >    // Transpose flag of the right-hand side dense vector
-typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
-   smpSubAssign( DenseVector<VT1,TF1>& lhs, const DenseVector<VT2,TF2>& rhs )
+typename EnableIfTrue< VT1_::smpAssignable && VT2_::smpAssignable >::Type
+   smpSubAssign( DenseVector<VT1_,TF1>& lhs, const DenseVector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -479,13 +479,13 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
       return;
    }
 
-   typedef typename VT1::ElementType                         ET1;
-   typedef typename VT2::ElementType                         ET2;
-   typedef IntrinsicTrait<typename VT1::ElementType>         IT;
-   typedef typename SubvectorExprTrait<VT1,aligned>::Type    AlignedTarget;
-   typedef typename SubvectorExprTrait<VT1,unaligned>::Type  UnalignedTarget;
+   typedef typename VT1_::ElementType                         ET1;
+   typedef typename VT2_::ElementType                         ET2;
+   typedef IntrinsicTrait<typename VT1_::ElementType>         IT;
+   typedef typename SubvectorExprTrait<VT1_,aligned>::Type    AlignedTarget;
+   typedef typename SubvectorExprTrait<VT1_,unaligned>::Type  UnalignedTarget;
 
-   const bool vectorizable( VT1::vectorizable && VT2::vectorizable && IsSame<ET1,ET2>::value );
+   const bool vectorizable( VT1_::vectorizable && VT2_::vectorizable && IsSame<ET1,ET2>::value );
    const bool lhsAligned  ( (~lhs).isAligned() );
    const bool rhsAligned  ( (~rhs).isAligned() );
 
@@ -547,12 +547,12 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side dense vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF2 >    // Transpose flag of the right-hand side dense vector
-typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
-   smpSubAssign( DenseVector<VT1,TF1>& lhs, const SparseVector<VT2,TF2>& rhs )
+typename EnableIfTrue< VT1_::smpAssignable && VT2_::smpAssignable >::Type
+   smpSubAssign( DenseVector<VT1_,TF1>& lhs, const SparseVector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -563,9 +563,9 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
       return;
    }
 
-   typedef typename VT1::ElementType                         ET1;
-   typedef typename VT2::ElementType                         ET2;
-   typedef typename SubvectorExprTrait<VT1,unaligned>::Type  UnalignedTarget;
+   typedef typename VT1_::ElementType                         ET1;
+   typedef typename VT2_::ElementType                         ET2;
+   typedef typename SubvectorExprTrait<VT1_,unaligned>::Type  UnalignedTarget;
 
 #pragma omp parallel shared( lhs, rhs )
    {
@@ -608,11 +608,11 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side vector
+        , typename VT2_  // Type of the right-hand side vector
         , bool TF2 >    // Transpose flag of the right-hand side vector
-inline void smpMultAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs )
+inline void smpMultAssign( DenseVector<VT1_,TF1>& lhs, const Vector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -640,12 +640,12 @@ inline void smpMultAssign( DenseVector<VT1,TF1>& lhs, const Vector<VT2,TF2>& rhs
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side dense vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF2 >    // Transpose flag of the right-hand side dense vector
-typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
-   smpMultAssign( DenseVector<VT1,TF1>& lhs, const DenseVector<VT2,TF2>& rhs )
+typename EnableIfTrue< VT1_::smpAssignable && VT2_::smpAssignable >::Type
+   smpMultAssign( DenseVector<VT1_,TF1>& lhs, const DenseVector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -656,13 +656,13 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
       return;
    }
 
-   typedef typename VT1::ElementType                         ET1;
-   typedef typename VT2::ElementType                         ET2;
-   typedef IntrinsicTrait<typename VT1::ElementType>         IT;
-   typedef typename SubvectorExprTrait<VT1,aligned>::Type    AlignedTarget;
-   typedef typename SubvectorExprTrait<VT1,unaligned>::Type  UnalignedTarget;
+   typedef typename VT1_::ElementType                         ET1;
+   typedef typename VT2_::ElementType                         ET2;
+   typedef IntrinsicTrait<typename VT1_::ElementType>         IT;
+   typedef typename SubvectorExprTrait<VT1_,aligned>::Type    AlignedTarget;
+   typedef typename SubvectorExprTrait<VT1_,unaligned>::Type  UnalignedTarget;
 
-   const bool vectorizable( VT1::vectorizable && VT2::vectorizable && IsSame<ET1,ET2>::value );
+   const bool vectorizable( VT1_::vectorizable && VT2_::vectorizable && IsSame<ET1,ET2>::value );
    const bool lhsAligned  ( (~lhs).isAligned() );
    const bool rhsAligned  ( (~rhs).isAligned() );
 
@@ -724,12 +724,12 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
 // in erroneous results and/or in compilation errors. Instead of using this function use the
 // assignment operator.
 */
-template< typename VT1  // Type of the left-hand side dense vector
+template< typename VT1_  // Type of the left-hand side dense vector
         , bool TF1      // Transpose flag of the left-hand side dense vector
-        , typename VT2  // Type of the right-hand side dense vector
+        , typename VT2_  // Type of the right-hand side dense vector
         , bool TF2 >    // Transpose flag of the right-hand side dense vector
-typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
-   smpMultAssign( DenseVector<VT1,TF1>& lhs, const SparseVector<VT2,TF2>& rhs )
+typename EnableIfTrue< VT1_::smpAssignable && VT2_::smpAssignable >::Type
+   smpMultAssign( DenseVector<VT1_,TF1>& lhs, const SparseVector<VT2_,TF2>& rhs )
 {
    BLAZE_FUNCTION_TRACE;
 
@@ -740,9 +740,9 @@ typename EnableIfTrue< VT1::smpAssignable && VT2::smpAssignable >::Type
       return;
    }
 
-   typedef typename VT1::ElementType                         ET1;
-   typedef typename VT2::ElementType                         ET2;
-   typedef typename SubvectorExprTrait<VT1,unaligned>::Type  UnalignedTarget;
+   typedef typename VT1_::ElementType                         ET1;
+   typedef typename VT2_::ElementType                         ET2;
+   typedef typename SubvectorExprTrait<VT1_,unaligned>::Type  UnalignedTarget;
 
 #pragma omp parallel shared( lhs, rhs )
    {

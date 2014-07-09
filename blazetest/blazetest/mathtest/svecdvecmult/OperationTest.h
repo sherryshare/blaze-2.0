@@ -83,28 +83,28 @@ namespace svecdvecmult {
 /*!\brief Auxiliary class template for the sparse vector/dense vector multiplicationoperation test.
 //
 // This class template represents one particular vector multiplicationtest between two vectors of
-// a particular type. The two template arguments \a VT1 and \a VT2 represent the types of the
+// a particular type. The two template arguments \a VT1_ and \a VT2_ represent the types of the
 // left-hand side and right-hand side vector, respectively.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
 class OperationTest
 {
  private:
    //**Type definitions****************************************************************************
-   typedef typename VT1::TransposeType                 TVT1;  //!< Transpose vector type 1
-   typedef typename VT2::TransposeType                 TVT2;  //!< Transpose vector type 2
-   typedef typename blaze::MultTrait<VT1,VT2>::Type    RE;    //!< Default result type
-   typedef typename blaze::MultTrait<TVT1,TVT2>::Type  TRE;   //!< Transpose default result type
+   typedef typename VT1_::TransposeType                 TVT1_;  //!< Transpose vector type 1
+   typedef typename VT2_::TransposeType                 TVT2_;  //!< Transpose vector type 2
+   typedef typename blaze::MultTrait<VT1_,VT2_>::Type    RE;    //!< Default result type
+   typedef typename blaze::MultTrait<TVT1_,TVT2_>::Type  TRE;   //!< Transpose default result type
    //**********************************************************************************************
 
    //**Enumerations********************************************************************************
-   enum { TF = blaze::IsRowVector<VT1>::value };
+   enum { TF = blaze::IsRowVector<VT1_>::value };
    //**********************************************************************************************
 
    //**Type definitions****************************************************************************
-   typedef typename VT1::ElementType        ET1;    //!< Element type 1
-   typedef typename VT2::ElementType        ET2;    //!< Element type 2
+   typedef typename VT1_::ElementType        ET1;    //!< Element type 1
+   typedef typename VT2_::ElementType        ET2;    //!< Element type 2
    typedef typename RE::ElementType         RET;    //!< Resulting element type
    typedef blaze::DynamicVector<ET1,TF>     RT1;    //!< Reference type 1
    typedef blaze::DynamicVector<ET2,TF>     RT2;    //!< Reference type 2
@@ -120,17 +120,17 @@ class OperationTest
    typedef TRE                              TSRE;   //!< Transpose sparse result type
 
    //! Type of the vector/vector multiplication expression
-   typedef typename blaze::MultExprTrait<VT1,VT2>::Type  VecVecMultExprType;
+   typedef typename blaze::MultExprTrait<VT1_,VT2_>::Type  VecVecMultExprType;
 
    //! Type of the transpose vector/transpose vector multiplication expression
-   typedef typename blaze::MultExprTrait<TVT1,TVT2>::Type  TVecTVecMultExprType;
+   typedef typename blaze::MultExprTrait<TVT1_,TVT2_>::Type  TVecTVecMultExprType;
    //**********************************************************************************************
 
  public:
    //**Constructors********************************************************************************
    /*!\name Constructors */
    //@{
-   explicit OperationTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 );
+   explicit OperationTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 );
    // No explicitly declared copy constructor.
    //@}
    //**********************************************************************************************
@@ -175,15 +175,15 @@ class OperationTest
    //**Member variables****************************************************************************
    /*!\name Member variables */
    //@{
-   VT1   lhs_;      //!< The left-hand side sparse vector.
-   VT2   rhs_;      //!< The right-hand side dense vector.
+   VT1_   lhs_;      //!< The left-hand side sparse vector.
+   VT2_   rhs_;      //!< The right-hand side dense vector.
    DRE   dres_;     //!< The dense vector for the result of the vector multiplication.
    SRE   sres_;     //!< The sparse vector for the result of the vector multiplication.
    RT1   reflhs_;   //!< The reference left-hand side vector.
    RT2   refrhs_;   //!< The reference right-hand side vector.
    DRRE  refres_;   //!< The reference result.
-   TVT1  tlhs_;     //!< The transpose left-hand side vector.
-   TVT2  trhs_;     //!< The transpose right-hand side vector.
+   TVT1_  tlhs_;     //!< The transpose left-hand side vector.
+   TVT2_  trhs_;     //!< The transpose right-hand side vector.
    TDRE  tdres_;    //!< The dense vector for the result of the transpose vector multiplication.
    TSRE  tsres_;    //!< The sparse vector for the result of the transpose vector multiplication.
    TRT1  treflhs_;  //!< The reference left-hand side transpose vector.
@@ -197,10 +197,10 @@ class OperationTest
 
    //**Compile time checks*************************************************************************
    /*! \cond BLAZE_INTERNAL */
-   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT1   );
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT2   );
-   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( TVT1  );
-   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TVT2  );
+   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( VT1_   );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( VT2_   );
+   BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( TVT1_  );
+   BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TVT2_  );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( RT1   );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( RT2   );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TRT1  );
@@ -213,24 +213,24 @@ class OperationTest
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( TSRE  );
    BLAZE_CONSTRAINT_MUST_BE_DENSE_VECTOR_TYPE ( TDRRE );
    BLAZE_CONSTRAINT_MUST_BE_SPARSE_VECTOR_TYPE( TSRRE );
-   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( VT1 , VT2   );
-   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( VT1 , RT1   );
-   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TVT1, TVT2  );
-   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TVT1, TRT1  );
+   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( VT1_ , VT2_   );
+   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( VT1_ , RT1   );
+   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TVT1_, TVT2_  );
+   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TVT1_, TRT1  );
    BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( RT1 , RT2   );
    BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TRT1, TRT2  );
-   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( VT1 , DRE   );
-   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( VT1 , SRE   );
+   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( VT1_ , DRE   );
+   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( VT1_ , SRE   );
    BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( RT1 , DRRE  );
    BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( RT1 , SRRE  );
-   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TVT1, TDRE  );
-   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TVT1, TSRE  );
+   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TVT1_, TDRE  );
+   BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TVT1_, TSRE  );
    BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TRT1, TDRRE );
    BLAZE_CONSTRAINT_VECTORS_MUST_HAVE_SAME_TRANSPOSE_FLAG( TRT1, TSRRE );
-   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( ET1, typename TVT1::ElementType   );
-   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( ET2, typename TVT2::ElementType   );
-   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( VT1, typename TVT1::TransposeType );
-   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( VT2, typename TVT2::TransposeType );
+   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( ET1, typename TVT1_::ElementType   );
+   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( ET2, typename TVT2_::ElementType   );
+   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( VT1_, typename TVT1_::TransposeType );
+   BLAZE_CONSTRAINT_MUST_BE_SAME_TYPE( VT2_, typename TVT2_::TransposeType );
    BLAZE_CONSTRAINT_MUST_BE_VECVECMULTEXPR_TYPE( VecVecMultExprType   );
    BLAZE_CONSTRAINT_MUST_BE_VECVECMULTEXPR_TYPE( TVecTVecMultExprType );
    BLAZE_CONSTRAINT_MUST_BE_COMPUTATION_TYPE( VecVecMultExprType   );
@@ -256,9 +256,9 @@ class OperationTest
 // \param creator2 The creator for the right-hand side dense vector of the vector multiplication.
 // \exception std::runtime_error Operation error detected.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-OperationTest<VT1,VT2>::OperationTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+OperationTest<VT1_,VT2_>::OperationTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 )
    : lhs_( creator1() )    // The left-hand side sparse vector
    , rhs_( creator2() )    // The right-hand side dense vector
    , dres_()               // The dense vector for the result of the vector multiplication
@@ -309,9 +309,9 @@ OperationTest<VT1,VT2>::OperationTest( const Creator<VT1>& creator1, const Creat
 // This function runs tests on the initial status of the vectors. In case any initialization
 // error is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testInitialStatus()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testInitialStatus()
 {
    //=====================================================================================
    // Performing initial tests with the given vectors
@@ -324,7 +324,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector size\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Detected size = " << lhs_.size() << "\n"
           << "   Expected size = " << reflhs_.size() << "\n";
       throw std::runtime_error( oss.str() );
@@ -337,7 +337,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector size\n"
           << " Details:\n"
           << "   Dense vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Detected size = " << rhs_.size() << "\n"
           << "   Expected size = " << refrhs_.size() << "\n";
       throw std::runtime_error( oss.str() );
@@ -350,7 +350,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Current initialization:\n" << lhs_ << "\n"
           << "   Expected initialization:\n" << reflhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -363,7 +363,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Dense vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Current initialization:\n" << rhs_ << "\n"
           << "   Expected initialization:\n" << refrhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -381,7 +381,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector size\n"
           << " Details:\n"
           << "   Transpose sparse vector type:\n"
-          << "     " << typeid( TVT1 ).name() << "\n"
+          << "     " << typeid( TVT1_ ).name() << "\n"
           << "   Detected size = " << tlhs_.size() << "\n"
           << "   Expected size = " << treflhs_.size() << "\n";
       throw std::runtime_error( oss.str() );
@@ -394,7 +394,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector size\n"
           << " Details:\n"
           << "   Transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Detected size = " << trhs_.size() << "\n"
           << "   Expected size = " << trefrhs_.size() << "\n";
       throw std::runtime_error( oss.str() );
@@ -407,7 +407,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Transpose sparse vector type:\n"
-          << "     " << typeid( TVT1 ).name() << "\n"
+          << "     " << typeid( TVT1_ ).name() << "\n"
           << "   Current initialization:\n" << tlhs_ << "\n"
           << "   Expected initialization:\n" << treflhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -420,7 +420,7 @@ void OperationTest<VT1,VT2>::testInitialStatus()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Current initialization:\n" << trhs_ << "\n"
           << "   Expected initialization:\n" << trefrhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -438,9 +438,9 @@ void OperationTest<VT1,VT2>::testInitialStatus()
 // This function tests the vector assignment. In case any error is detected, a
 // \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testAssignment()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testAssignment()
 {
    //=====================================================================================
    // Performing an assignment with the given vectors
@@ -456,9 +456,9 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Failed assignment\n"
           << " Details:\n"
           << "   Left-hand side sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Right-hand side dense vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Error message: " << ex.what() << "\n";
       throw std::runtime_error( oss.str() );
    }
@@ -469,7 +469,7 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Sparse vector type:\n"
-          << "     " << typeid( VT1 ).name() << "\n"
+          << "     " << typeid( VT1_ ).name() << "\n"
           << "   Current initialization:\n" << lhs_ << "\n"
           << "   Expected initialization:\n" << reflhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -481,7 +481,7 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Dense vector type:\n"
-          << "     " << typeid( VT2 ).name() << "\n"
+          << "     " << typeid( VT2_ ).name() << "\n"
           << "   Current initialization:\n" << rhs_ << "\n"
           << "   Expected initialization:\n" << refrhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -502,9 +502,9 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Failed assignment\n"
           << " Details:\n"
           << "   Transpose left-hand side sparse vector type:\n"
-          << "     " << typeid( TVT1 ).name() << "\n"
+          << "     " << typeid( TVT1_ ).name() << "\n"
           << "   Transpose right-hand side dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Error message: " << ex.what() << "\n";
       throw std::runtime_error( oss.str() );
    }
@@ -515,7 +515,7 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Transpose sparse vector type:\n"
-          << "     " << typeid( TVT1 ).name() << "\n"
+          << "     " << typeid( TVT1_ ).name() << "\n"
           << "   Current initialization:\n" << tlhs_ << "\n"
           << "   Expected initialization:\n" << treflhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -527,7 +527,7 @@ void OperationTest<VT1,VT2>::testAssignment()
           << " Error: Invalid vector initialization\n"
           << " Details:\n"
           << "   Transpose dense vector type:\n"
-          << "     " << typeid( TVT2 ).name() << "\n"
+          << "     " << typeid( TVT2_ ).name() << "\n"
           << "   Current initialization:\n" << trhs_ << "\n"
           << "   Expected initialization:\n" << trefrhs_ << "\n";
       throw std::runtime_error( oss.str() );
@@ -545,9 +545,9 @@ void OperationTest<VT1,VT2>::testAssignment()
 // This function tests the element access via the subscript operator. In case any
 // error is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testElementAccess()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testElementAccess()
 {
    using blaze::equal;
 
@@ -564,9 +564,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at index 0 detected\n"
              << " Details:\n"
              << "   Left-hand side sparse vector type:\n"
-             << "     " << typeid( VT1 ).name() << "\n"
+             << "     " << typeid( VT1_ ).name() << "\n"
              << "   Right-hand side dense vector type:\n"
-             << "     " << typeid( VT2 ).name() << "\n";
+             << "     " << typeid( VT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -576,9 +576,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at index 0 detected\n"
              << " Details:\n"
              << "   Left-hand side sparse vector type:\n"
-             << "     " << typeid( VT1 ).name() << "\n"
+             << "     " << typeid( VT1_ ).name() << "\n"
              << "   Right-hand side dense vector type:\n"
-             << "     " << typeid( VT2 ).name() << "\n";
+             << "     " << typeid( VT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -588,9 +588,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at index 0 detected\n"
              << " Details:\n"
              << "   Left-hand side sparse vector type:\n"
-             << "     " << typeid( VT1 ).name() << "\n"
+             << "     " << typeid( VT1_ ).name() << "\n"
              << "   Right-hand side dense vector type:\n"
-             << "     " << typeid( VT2 ).name() << "\n";
+             << "     " << typeid( VT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -600,9 +600,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at index 0 detected\n"
              << " Details:\n"
              << "   Left-hand side sparse vector type:\n"
-             << "     " << typeid( VT1 ).name() << "\n"
+             << "     " << typeid( VT1_ ).name() << "\n"
              << "   Right-hand side dense vector type:\n"
-             << "     " << typeid( VT2 ).name() << "\n";
+             << "     " << typeid( VT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
    }
@@ -620,9 +620,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at index 0 detected\n"
              << " Details:\n"
              << "   Transpose left-hand side sparse vector type:\n"
-             << "     " << typeid( TVT1 ).name() << "\n"
+             << "     " << typeid( TVT1_ ).name() << "\n"
              << "   Transpose right-hand side dense vector type:\n"
-             << "     " << typeid( TVT2 ).name() << "\n";
+             << "     " << typeid( TVT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -632,9 +632,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at index 0 detected\n"
              << " Details:\n"
              << "   Transpose left-hand side sparse vector type:\n"
-             << "     " << typeid( TVT1 ).name() << "\n"
+             << "     " << typeid( TVT1_ ).name() << "\n"
              << "   Transpose right-hand side dense vector type:\n"
-             << "     " << typeid( TVT2 ).name() << "\n";
+             << "     " << typeid( TVT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -644,9 +644,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at index 0 detected\n"
              << " Details:\n"
              << "   Transpose left-hand side sparse vector type:\n"
-             << "     " << typeid( TVT1 ).name() << "\n"
+             << "     " << typeid( TVT1_ ).name() << "\n"
              << "   Transpose right-hand side dense vector type:\n"
-             << "     " << typeid( TVT2 ).name() << "\n";
+             << "     " << typeid( TVT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
 
@@ -656,9 +656,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
              << " Error: Unequal resulting elements at index 0 detected\n"
              << " Details:\n"
              << "   Transpose left-hand side sparse vector type:\n"
-             << "     " << typeid( TVT1 ).name() << "\n"
+             << "     " << typeid( TVT1_ ).name() << "\n"
              << "   Transpose right-hand side dense vector type:\n"
-             << "     " << typeid( TVT2 ).name() << "\n";
+             << "     " << typeid( TVT2_ ).name() << "\n";
          throw std::runtime_error( oss.str() );
       }
    }
@@ -677,9 +677,9 @@ void OperationTest<VT1,VT2>::testElementAccess()
 // multiplication or the subsequent assignment is detected, a \a std::runtime_error exception
 // is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testBasicOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testBasicOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_BASIC_OPERATION
    if( BLAZETEST_MATHTEST_TEST_BASIC_OPERATION > 1 )
@@ -700,10 +700,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             refres_ = reflhs_ * refrhs_;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -712,10 +712,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             trefres_ = treflhs_ * trefrhs_;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Multiplication with evaluated vectors
@@ -730,10 +730,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             refres_ = eval( reflhs_ ) * eval( refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -742,10 +742,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             trefres_ = eval( treflhs_ ) * eval( trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -765,10 +765,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             refres_ += reflhs_ * refrhs_;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -777,10 +777,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             trefres_ += treflhs_ * trefrhs_;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Multiplication with addition assignment with the given vectors
@@ -795,10 +795,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             refres_ += eval( reflhs_ ) * eval( refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -807,10 +807,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             trefres_ += eval( treflhs_ ) * eval( trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -830,10 +830,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             refres_ -= reflhs_ * refrhs_;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -842,10 +842,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             trefres_ -= treflhs_ * trefrhs_;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Multiplication with subtraction assignment with evaluated vectors
@@ -860,10 +860,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             refres_ -= eval( reflhs_ ) * eval( refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -872,10 +872,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             trefres_ -= eval( treflhs_ ) * eval( trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -895,10 +895,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             refres_ *= reflhs_ * refrhs_;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -907,10 +907,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             trefres_ *= treflhs_ * trefrhs_;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Multiplication with multiplication assignment with evaluated vectors
@@ -925,10 +925,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             refres_ *= eval( reflhs_ ) * eval( refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -937,10 +937,10 @@ void OperationTest<VT1,VT2>::testBasicOperation()
             trefres_ *= eval( treflhs_ ) * eval( trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
    }
 #endif
@@ -959,9 +959,9 @@ void OperationTest<VT1,VT2>::testBasicOperation()
 // multiplication or the subsequent assignment is detected, a \a std::runtime_error exception
 // is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testNegatedOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testNegatedOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_NEGATED_OPERATION
    if( BLAZETEST_MATHTEST_TEST_NEGATED_OPERATION > 1 )
@@ -982,10 +982,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             refres_ = -( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -994,10 +994,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             trefres_ = -( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Negated multiplication with evaluated vectors
@@ -1012,10 +1012,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             refres_ = -( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1024,10 +1024,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             trefres_ = -( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1047,10 +1047,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             refres_ += -( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1059,10 +1059,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             trefres_ += -( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Negated multiplication with addition assignment with evaluated vectors
@@ -1077,10 +1077,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             refres_ += -( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1089,10 +1089,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             trefres_ += -( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1112,10 +1112,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             refres_ -= -( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
          try {
             initTransposeResults();
             tdres_   -= -( tlhs_ * trhs_ );
@@ -1123,10 +1123,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             trefres_ -= -( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Negated multiplication with subtraction assignment with evaluated vectors
@@ -1141,10 +1141,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             refres_ -= -( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1153,10 +1153,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             trefres_ -= -( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1176,10 +1176,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             refres_ *= -( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1188,10 +1188,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             trefres_ *= -( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Negated multiplication with multiplication assignment with evaluated vectors
@@ -1206,10 +1206,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             refres_ *= -( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1218,10 +1218,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
             trefres_ *= -( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
    }
 #endif
@@ -1241,10 +1241,10 @@ void OperationTest<VT1,VT2>::testNegatedOperation()
 // multiplication or the subsequent assignment is detected, a \a std::runtime_error exception
 // is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
 template< typename T >    // Type of the scalar
-void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
+void OperationTest<VT1_,VT2_>::testScaledOperation( T scalar )
 {
    BLAZE_CONSTRAINT_MUST_BE_NUMERIC_TYPE( T );
 
@@ -1282,7 +1282,7 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             throw std::runtime_error( oss.str() );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
       }
 
 
@@ -1313,7 +1313,7 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             throw std::runtime_error( oss.str() );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
       }
 
 
@@ -1344,7 +1344,7 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             throw std::runtime_error( oss.str() );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
       }
 
 
@@ -1375,7 +1375,7 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             throw std::runtime_error( oss.str() );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
       }
 
 
@@ -1406,7 +1406,7 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             throw std::runtime_error( oss.str() );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
       }
 
 
@@ -1426,10 +1426,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ = scalar * ( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-             convertException<VT1,VT2>( ex );
+             convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1438,10 +1438,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ = scalar * ( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with evaluated vectors
@@ -1456,10 +1456,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ = scalar * ( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1468,10 +1468,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ = scalar * ( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1491,10 +1491,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ = ( reflhs_ * refrhs_ ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1503,10 +1503,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ = ( treflhs_ * trefrhs_ ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with evaluated vectors
@@ -1521,10 +1521,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ = ( eval( reflhs_ ) * eval( refrhs_ ) ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1533,10 +1533,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ = ( eval( treflhs_ ) * eval( trefrhs_ ) ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1556,10 +1556,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ = ( reflhs_ * refrhs_ ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1568,10 +1568,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ = ( treflhs_ * trefrhs_ ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with evaluated vectors
@@ -1586,10 +1586,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ = ( eval( reflhs_ ) * eval( refrhs_ ) ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1598,10 +1598,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ = ( eval( treflhs_ ) * eval( trefrhs_ ) ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1621,10 +1621,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ += scalar * ( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1633,10 +1633,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ += scalar * ( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with addition assignment with evaluated vectors
@@ -1651,10 +1651,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ += scalar * ( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1663,10 +1663,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ += scalar * ( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1686,10 +1686,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ += ( reflhs_ * refrhs_ ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1698,10 +1698,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ += ( treflhs_ * trefrhs_ ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with addition assignment with evaluated vectors
@@ -1716,10 +1716,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ += ( eval( reflhs_ ) * eval( refrhs_ ) ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1728,10 +1728,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ += ( eval( treflhs_ ) * eval( trefrhs_ ) ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1751,10 +1751,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ += ( reflhs_ * refrhs_ ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1763,10 +1763,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ += ( treflhs_ * trefrhs_ ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with addition assignment with evaluated vectors
@@ -1781,10 +1781,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ += ( eval( reflhs_ ) * eval( refrhs_ ) ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1793,10 +1793,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ += ( eval( treflhs_ ) * eval( trefrhs_ ) ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1816,10 +1816,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ -= scalar * ( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1828,10 +1828,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ -= scalar * ( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with subtraction assignment with evaluated vectors
@@ -1846,10 +1846,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ -= scalar * ( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1858,10 +1858,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ -= scalar * ( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1881,10 +1881,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ -= ( reflhs_ * refrhs_ ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1893,10 +1893,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ -= ( treflhs_ * trefrhs_ ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with subtraction assignment with evaluated vectors
@@ -1911,10 +1911,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ -= ( eval( reflhs_ ) * eval( refrhs_ ) ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1923,10 +1923,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ -= ( eval( treflhs_ ) * eval( trefrhs_ ) ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -1946,10 +1946,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ -= ( reflhs_ * refrhs_ ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1958,10 +1958,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ -= ( treflhs_ * trefrhs_ ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with subtraction assignment with evaluated vectors
@@ -1976,10 +1976,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ -= ( eval( reflhs_ ) * eval( refrhs_ ) ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -1988,10 +1988,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ -= ( eval( treflhs_ ) * eval( trefrhs_ ) ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -2011,10 +2011,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ *= scalar * ( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2023,10 +2023,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ *= scalar * ( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with multiplication assignment with evaluated vectors
@@ -2041,10 +2041,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ *= scalar * ( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2053,10 +2053,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ *= scalar * ( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -2076,10 +2076,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ *= ( reflhs_ * refrhs_ ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2088,10 +2088,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ *= ( treflhs_ * trefrhs_ ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with multiplication assignment with evaluated vectors
@@ -2106,10 +2106,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ *= ( eval( reflhs_ ) * eval( refrhs_ ) ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2118,10 +2118,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ *= ( eval( treflhs_ ) * eval( trefrhs_ ) ) * scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -2141,10 +2141,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ *= ( reflhs_ * refrhs_ ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2153,10 +2153,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ *= ( treflhs_ * trefrhs_ ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Scaled multiplication with multiplication assignment with evaluated vectors
@@ -2171,10 +2171,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             refres_ *= ( eval( reflhs_ ) * eval( refrhs_ ) ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2183,10 +2183,10 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
             trefres_ *= ( eval( treflhs_ ) * eval( trefrhs_ ) ) / scalar;
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
    }
 #endif
@@ -2205,9 +2205,9 @@ void OperationTest<VT1,VT2>::testScaledOperation( T scalar )
 // multiplication or the subsequent assignment is detected, a \a std::runtime_error exception is
 // thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testTransposeOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testTransposeOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_TRANSPOSE_OPERATION
    if( BLAZETEST_MATHTEST_TEST_TRANSPOSE_OPERATION > 1 )
@@ -2228,10 +2228,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             trefres_ = trans( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkTransposeResults<VT1,VT2>();
+         checkTransposeResults<VT1_,VT2_>();
 
          try {
             initResults();
@@ -2240,10 +2240,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             refres_ = trans( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkResults<TVT1,TVT2>();
+         checkResults<TVT1_,TVT2_>();
       }
 
       // Transpose multiplication with evaluated vectors
@@ -2258,10 +2258,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             trefres_ = trans( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkTransposeResults<VT1,VT2>();
+         checkTransposeResults<VT1_,VT2_>();
 
          try {
             initResults();
@@ -2270,10 +2270,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             refres_ = trans( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkResults<TVT1,TVT2>();
+         checkResults<TVT1_,TVT2_>();
       }
 
 
@@ -2293,10 +2293,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             trefres_ += trans( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkTransposeResults<VT1,VT2>();
+         checkTransposeResults<VT1_,VT2_>();
 
          try {
             initResults();
@@ -2305,10 +2305,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             refres_ += trans( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkResults<TVT1,TVT2>();
+         checkResults<TVT1_,TVT2_>();
       }
 
       // Transpose multiplication with addition assignment with evaluated vectors
@@ -2323,10 +2323,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             trefres_ += trans( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkTransposeResults<VT1,VT2>();
+         checkTransposeResults<VT1_,VT2_>();
 
          try {
             initResults();
@@ -2335,10 +2335,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             refres_ += trans( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkResults<TVT1,TVT2>();
+         checkResults<TVT1_,TVT2_>();
       }
 
 
@@ -2358,10 +2358,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             trefres_ -= trans( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkTransposeResults<VT1,VT2>();
+         checkTransposeResults<VT1_,VT2_>();
 
          try {
             initResults();
@@ -2370,10 +2370,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             refres_ -= trans( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkResults<TVT1,TVT2>();
+         checkResults<TVT1_,TVT2_>();
       }
 
       // Transpose multiplication with subtraction assignment with evaluated vectors
@@ -2388,10 +2388,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             trefres_ -= trans( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkTransposeResults<VT1,VT2>();
+         checkTransposeResults<VT1_,VT2_>();
 
          try {
             initResults();
@@ -2400,10 +2400,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             refres_ -= trans( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkResults<TVT1,TVT2>();
+         checkResults<TVT1_,TVT2_>();
       }
 
 
@@ -2423,10 +2423,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             trefres_ *= trans( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkTransposeResults<VT1,VT2>();
+         checkTransposeResults<VT1_,VT2_>();
 
          try {
             initResults();
@@ -2435,10 +2435,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             refres_ *= trans( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkResults<TVT1,TVT2>();
+         checkResults<TVT1_,TVT2_>();
       }
 
       // Transpose multiplication with multiplication assignment with evaluated vectors
@@ -2453,10 +2453,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             trefres_ *= trans( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkTransposeResults<VT1,VT2>();
+         checkTransposeResults<VT1_,VT2_>();
 
          try {
             initResults();
@@ -2465,10 +2465,10 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
             refres_ *= trans( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkResults<TVT1,TVT2>();
+         checkResults<TVT1_,TVT2_>();
       }
    }
 #endif
@@ -2487,9 +2487,9 @@ void OperationTest<VT1,VT2>::testTransposeOperation()
 // multiplication or the subsequent assignment is detected, a \a std::runtime_error exception
 // is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testAbsOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testAbsOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_ABS_OPERATION
    if( BLAZETEST_MATHTEST_TEST_ABS_OPERATION > 1 )
@@ -2510,10 +2510,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             refres_ = abs( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2522,10 +2522,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             trefres_ = abs( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Abs multiplication with evaluated vectors
@@ -2540,10 +2540,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             refres_ = abs( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2552,10 +2552,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             trefres_ = abs( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -2575,10 +2575,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             refres_ += abs( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2587,10 +2587,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             trefres_ += abs( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Abs multiplication with addition assignment with evaluated vectors
@@ -2605,10 +2605,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             refres_ += abs( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2617,10 +2617,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             trefres_ += abs( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -2640,10 +2640,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             refres_ -= abs( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2652,10 +2652,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             trefres_ -= abs( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Abs multiplication with subtraction assignment with evaluated vectors
@@ -2670,10 +2670,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             refres_ -= abs( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2682,10 +2682,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             trefres_ -= abs( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -2705,10 +2705,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             refres_ *= abs( reflhs_ * refrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2717,10 +2717,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             trefres_ *= abs( treflhs_ * trefrhs_ );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Abs multiplication with multiplication assignment with evaluated vectors
@@ -2735,10 +2735,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             refres_ *= abs( eval( reflhs_ ) * eval( refrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2747,10 +2747,10 @@ void OperationTest<VT1,VT2>::testAbsOperation()
             trefres_ *= abs( eval( treflhs_ ) * eval( trefrhs_ ) );
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
    }
 #endif
@@ -2768,9 +2768,9 @@ void OperationTest<VT1,VT2>::testAbsOperation()
 // assignment, and subtraction assignment. In case any error resulting from the multiplication
 // or the subsequent assignment is detected, a \a std::runtime_error exception is thrown.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::testSubvectorOperation()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::testSubvectorOperation()
 {
 #if BLAZETEST_MATHTEST_TEST_SUBVECTOR_OPERATION
    if( BLAZETEST_MATHTEST_TEST_SUBVECTOR_OPERATION > 1 )
@@ -2798,10 +2798,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2813,10 +2813,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Subvector-wise multiplication with evaluated vectors
@@ -2834,10 +2834,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2849,10 +2849,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -2875,10 +2875,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2890,10 +2890,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Subvector-wise multiplication with addition assignment with evaluated vectors
@@ -2911,10 +2911,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2926,10 +2926,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -2952,10 +2952,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -2967,10 +2967,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Subvector-wise multiplication with subtraction assignment with evaluated vectors
@@ -2988,10 +2988,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -3003,10 +3003,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
 
@@ -3029,10 +3029,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -3044,10 +3044,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
 
       // Subvector-wise multiplication with multiplication assignment with evaluated vectors
@@ -3065,10 +3065,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<VT1,VT2>( ex );
+            convertException<VT1_,VT2_>( ex );
          }
 
-         checkResults<VT1,VT2>();
+         checkResults<VT1_,VT2_>();
 
          try {
             initTransposeResults();
@@ -3080,10 +3080,10 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
             }
          }
          catch( std::exception& ex ) {
-            convertException<TVT1,TVT2>( ex );
+            convertException<TVT1_,TVT2_>( ex );
          }
 
-         checkTransposeResults<TVT1,TVT2>();
+         checkTransposeResults<TVT1_,TVT2_>();
       }
    }
 #endif
@@ -3110,11 +3110,11 @@ void OperationTest<VT1,VT2>::testSubvectorOperation()
 // two template arguments \a LT and \a RT indicate the types of the left-hand side and right-hand
 // side operands used for the computations.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
 template< typename LT     // Type of the left-hand side operand
         , typename RT >   // Type of the right-hand side operand
-void OperationTest<VT1,VT2>::checkResults()
+void OperationTest<VT1_,VT2_>::checkResults()
 {
    using blaze::IsRowVector;
 
@@ -3162,11 +3162,11 @@ void OperationTest<VT1,VT2>::checkResults()
 // results. The two template arguments \a LT and \a RT indicate the types of the left-hand
 // side and right-hand side operands used for the computations.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
 template< typename LT     // Type of the left-hand side operand
         , typename RT >   // Type of the right-hand side operand
-void OperationTest<VT1,VT2>::checkTransposeResults()
+void OperationTest<VT1_,VT2_>::checkTransposeResults()
 {
    using blaze::IsRowVector;
 
@@ -3219,9 +3219,9 @@ void OperationTest<VT1,VT2>::checkTransposeResults()
 // This function is called before each non-transpose test case to initialize the according result
 // vectors to random values.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::initResults()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::initResults()
 {
    const typename blaze::BaseElementType<RE>::Type min( randmin );
    const typename blaze::BaseElementType<RE>::Type max( randmax );
@@ -3241,9 +3241,9 @@ void OperationTest<VT1,VT2>::initResults()
 // This function is called before each transpose test case to initialize the according result
 // vectors to random values.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void OperationTest<VT1,VT2>::initTransposeResults()
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void OperationTest<VT1_,VT2_>::initTransposeResults()
 {
    const typename blaze::BaseElementType<RE>::Type min( randmin );
    const typename blaze::BaseElementType<RE>::Type max( randmax );
@@ -3267,11 +3267,11 @@ void OperationTest<VT1,VT2>::initTransposeResults()
 // test. The two template arguments \a LT and \a RT indicate the types of the left-hand side and
 // right-hand side operands used for the computations.
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
 template< typename LT     // Type of the left-hand side operand
         , typename RT >   // Type of the right-hand side operand
-void OperationTest<VT1,VT2>::convertException( const std::exception& ex )
+void OperationTest<VT1_,VT2_>::convertException( const std::exception& ex )
 {
    using blaze::IsRowVector;
 
@@ -3304,12 +3304,12 @@ void OperationTest<VT1,VT2>::convertException( const std::exception& ex )
 // \param creator2 The creator for the right-hand side dense vector.
 // \return void
 */
-template< typename VT1    // Type of the left-hand side sparse vector
-        , typename VT2 >  // Type of the right-hand side dense vector
-void runTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
+template< typename VT1_    // Type of the left-hand side sparse vector
+        , typename VT2_ >  // Type of the right-hand side dense vector
+void runTest( const Creator<VT1_>& creator1, const Creator<VT2_>& creator2 )
 {
    for( size_t rep=0; rep<repetitions; ++rep ) {
-      OperationTest<VT1,VT2>( creator1, creator2 );
+      OperationTest<VT1_,VT2_>( creator1, creator2 );
    }
 }
 //*************************************************************************************************
@@ -3327,8 +3327,8 @@ void runTest( const Creator<VT1>& creator1, const Creator<VT2>& creator2 )
 /*! \cond BLAZE_INTERNAL */
 /*!\brief Macro for the definition of a sparse vector/dense vector multiplicationtest case.
 */
-#define DEFINE_SVECDVECMULT_OPERATION_TEST( VT1, VT2 ) \
-   extern template class blazetest::mathtest::svecdvecmult::OperationTest<VT1,VT2>
+#define DEFINE_SVECDVECMULT_OPERATION_TEST( VT1_, VT2_ ) \
+   extern template class blazetest::mathtest::svecdvecmult::OperationTest<VT1_,VT2_>
 /*! \endcond */
 //*************************************************************************************************
 
